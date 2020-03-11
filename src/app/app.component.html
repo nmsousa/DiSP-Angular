@@ -1,0 +1,22 @@
+<nz-layout [ngStyle]="{ 'flex-direction': 'row' }" class="disp__main">
+  <app-sidebar [isCollapsed]="sidebarCollapsed">
+  </app-sidebar>
+  <nz-layout class="disp__content">
+    <app-top-navbar
+      [isCollapsed]="sidebarCollapsed"
+      (clickTrigger)="toggleSidebar()"
+    >
+    </app-top-navbar>
+    <perfect-scrollbar style="max-height:  calc(100vh - 6rem);margin-top:2rem">
+      <nz-content>
+        <div class="container">
+          <!-- <app-breadcrumb-line></app-breadcrumb-line> -->
+          <router-outlet></router-outlet>
+        </div>
+      </nz-content>
+    </perfect-scrollbar>
+  </nz-layout>
+</nz-layout>
+
+<!-- Notification overlay to show error, success and info messages -->
+<ep-notification-overlay></ep-notification-overlay>
