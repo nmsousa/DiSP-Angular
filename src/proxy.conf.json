@@ -1,0 +1,7 @@
+{
+  "/disp-web-2.9.0/*": {
+    "target": "http://localhost:8081",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}

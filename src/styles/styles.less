@@ -1,0 +1,144 @@
+:focus {
+  outline: none;
+}
+button:focus {
+  outline: none;
+}
+
+.disp {
+  &__content {
+    min-height: 100vh;
+  }
+  &__main {
+    // height: 100%;
+    h1,
+    h2,
+    h3 {
+      color: @primary-color !important;
+      font-weight: 600 !important;
+    }
+
+    h1 {
+      font-size: 3em !important;
+    }
+    h2 {
+      font-size: 2.5em !important;
+    }
+
+    h3 {
+      font-size: 2em !important;
+    }
+
+    &__sidebar {
+      h1 {
+        color: @contrastColor !important;
+        font-size: 3em;
+      }
+    }
+  }
+}
+@media (min-width: 1600px) {
+  .container {
+    max-width: 1440px;
+  }
+}
+
+nz-table {
+  background: #fff;
+}
+
+// To avoid breaking table column header texts of breaking into new lines
+.ant-table-thead > tr > th {
+  word-break: normal !important;
+}
+
+.ant-pagination {
+  padding-right: 1em;
+}
+
+.ant-pagination-prev,
+.ant-pagination-next {
+  line-height: 26px !important;
+}
+.header {
+  h1 {
+    font-size: 4em !important;
+    font-weight: 300 !important;
+    span {
+      font-size: 0.85em !important;
+      color: rgb(100, 100, 100);
+    }
+  }
+  .ant-btn-circle {
+    border-radius: 3px;
+    margin-left: 1rem;
+    margin-right: 0.75rem;
+  }
+  .mdl-textfield__expandable-holder {
+    margin: 0;
+  }
+  .btn {
+    &.btn-link {
+      color: rgb(71, 71, 71);
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.mdl-button--primary {
+  background: transparent;
+  &:hover {
+    color: #0092c8;
+    background-color: transparent !important;
+  }
+}
+
+.card {
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  background: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.editable-cell {
+  position: relative;
+}
+
+.editable-cell-value-wrap {
+  padding: 5px 12px;
+  cursor: pointer;
+}
+
+.editable-row:hover .editable-cell-value-wrap {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 4px 11px;
+}
+.back-button {
+  background: transparent;
+  border: none;
+}
+
+/* Overriding styles */
+
+/* EP Logo */
+ep-sidebar .logo img {
+  padding-left: 2.5rem;
+}
+
+/* This affects at least the signature-modes page */
+.ant-collapse {
+  margin-top: 10px !important;
+}
+
+nz-table th {
+  font-weight: bold !important;
+  border-bottom: none !important; /* remove the th underline from select and edit columns for now */
+}
+
+nz-table tr:nth-child(even) {
+  background: @gray-color; /* To make the background of the even rows light gray */
+}
