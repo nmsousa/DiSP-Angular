@@ -1,0 +1,131 @@
+<!-- Header -->
+<div class="row">
+  <div class="col">
+    <h2>{{ 'NEW_TEMPLATE.HEADER' | translate }}</h2>
+  </div>
+</div>
+
+<hr />
+
+<div class="row">
+  <div class="col">
+    <!-- Back -->
+    <button ep-button ep-colored="primary" ep-theme="ant" class="float-right" [routerLink]="'../'">
+      {{ 'GENERIC.BTN_BACK' | translate | uppercase }}
+    </button>
+  </div>
+</div>
+
+<hr />
+
+<form nz-form [nzLayout]="'vertical'" [formGroup]="form">
+
+  <div class="row mb-3">
+    <div class="col">
+
+      <!-- Main Informations -->
+      <ep-accordion epTitle="{{ 'EDIT_TEMPLATE.MAIN_INFORMATION.HEADER' | translate }}">
+
+        <div class="row mb-3">
+          <!-- Title -->
+          <div class="col-12 col-xl-6">
+            <nz-form-item>
+              <nz-form-label nzFor="title" nzRequired>{{ 'EDIT_TEMPLATE.MAIN_INFORMATION.TITLE' | translate }}</nz-form-label>
+              <nz-form-control>
+                <input id="title" ep-input type="text" formControlName="title" (input)="form.patchValue({title: $event.target.value.toUpperCase()})"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Signature Type -->
+          <div class="col-12 col-xl-6">
+            <nz-form-item>
+              <nz-form-label nzRequired class="d-inline-block">{{ 'EDIT_TEMPLATE.MAIN_INFORMATION.SIGNATURE_TYPE' | translate }}
+                <i nz-icon nzType="info-circle" nzTheme="outline" class="form-field-info-icon" *ngIf="selectedSignatureType"
+                  nz-popover nzPopoverTitle="Title"
+                   (nzVisibleChange)="signatureTypeInfoPopupVisible = !signatureTypeInfoPopupVisible"
+                  nzTrigger="click" [nzContent]="contentTemplateSignatureType">
+                </i>
+              </nz-form-label>
+
+              <!-- Signature Type Info Popup -->
+              <ng-template #contentTemplateSignatureType>
+                <app-signature-type-info [signatureType]="selectedSignatureType" *ngIf="signatureTypeInfoPopupVisible"></app-signature-type-info>
+              </ng-template>
+
+              <nz-form-control>
+                <ep-select formControlName="signatureType" (ngModelChange)="onSelectSignatureType($event)"
+                  epPlaceHolder="{{ 'EDIT_TEMPLATE.MAIN_INFORMATION.SIGNATURE_TYPE.PLACEHOLDER' | translate }}">
+                  <ep-option *ngFor="let signatureType of signatureTypes" [epLabel]="signatureType.content.name"
+                    [epValue]="signatureType.content.name">
+                  </ep-option>
+                </ep-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </ep-accordion>
+
+    </div>
+  </div>
+
+
+  <!-- Signatories -->
+  <div class="row mb-3">
+    <div class="col">
+      <ep-accordion epTitle="{{ 'EDIT_TEMPLATE.SIGNATORIES.HEADER' | translate }}">
+        <app-persons-editable-list [persons]="signatories" (personsChanged)="updatePersons('signatories', $event)" [isSortable]="true"></app-persons-editable-list>
+      </ep-accordion>
+    </div>
+  </div>
+
+  <!-- Security and Roles -->
+  <div class="row mb-3">
+    <div class="col">
+      <ep-accordion epTitle="{{ 'EDIT_TEMPLATE.SECURITY_AND_ROLES.HEADER' | translate }}">
+        <p class="ant-upload-hint">{{ 'EDIT_TEMPLATE.SECURITY_AND_ROLES.LEGEND' | translate }}</p>
+        <app-persons-editable-list [persons]="securityAndRoles" (personsChanged)="updatePersons('securityAndRoles', $event)"
+          [roles]="securityRoles">
+        </app-persons-editable-list>
+      </ep-accordion>
+    </div>
+  </div>
+
+  <!-- Third Party (Notified) -->
+  <div class="row mb-3">
+    <div class="col">
+      <ep-accordion epTitle="{{ 'EDIT_TEMPLATE.THIRD_PARTY.HEADER' | translate }}">
+        <p class="ant-upload-hint">{{ 'EDIT_TEMPLATE.THIRD_PARTY.LEGEND' | translate }}</p>
+        <app-template-third-party [records]="thirdParties" (recordsChanged)="updatePersons('thirdParties', $event)"></app-template-third-party>
+      </ep-accordion>
+    </div>
+  </div>
+
+  <!-- Template (Owners + Users) -->
+  <div class="row mb-3">
+    <div class="col">
+      <ep-accordion epTitle="{{ 'EDIT_TEMPLATE.TEMPLATE.HEADER' | translate }}">
+        <app-persons-editable-list [persons]="templateUsersAndOwners" (personsChanged)="updatePersons('templateUsersAndOwners', $event)"
+          [roles]="templateRoles"></app-persons-editable-list>
+      </ep-accordion>
+    </div>
+  </div>
+
+
+  <div class="floating-btns-container">
+    <!-- Save button -->
+    <button ep-button ep-theme="ant" ep-colored="primary" type="button"
+      class="save-btn"
+      [disabled]="!form.valid" (click)="onSave()">
+      <i nz-icon nzType="save" nzTheme="outline" class="mr-2"></i>
+      {{ 'NEW_TEMPLATE.BTN_CREATE' | translate | uppercase }}
+    </button>
+
+    <!-- Cancel button -->
+    <button ep-button ep-theme="ant" type="button"
+      *ngIf="hasChanges" class="cancel-btn ml-3" (click)="onCancel()">
+      {{ 'EDIT_TEMPLATE.BTN_CANCEL' | translate | uppercase }}
+    </button>
+  </div>
+
+</form>

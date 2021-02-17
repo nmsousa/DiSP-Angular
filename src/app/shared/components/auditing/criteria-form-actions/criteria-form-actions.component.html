@@ -1,0 +1,42 @@
+<div class="row mb-2">
+  <div class="col text-right list-buttons-container">
+
+    <!-- Clear Search Button -->
+    <button
+      ep-button
+      ep-theme="ant"
+      class="clear-button mr-2"
+      type="button"
+      (click)="onClearSearch()">
+      {{ 'AUDITING.CRITERIA_FORM_ACTIONS.BTN_CLEAR' | translate }}
+    </button>
+
+    <!-- Search button -->
+    <button
+      ep-button
+      ep-theme="ant"
+      ep-colored="primary"
+      type="submit"
+      [disabled]="!searchForm.valid"
+      (click)="onSearch()">
+      {{ 'AUDITING.CRITERIA_FORM_ACTIONS.BTN_SEARCH' | translate }}
+    </button>
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="col list-buttons-container">
+    <!-- Export button -->
+    <button
+      ep-button
+      ep-theme="ant"
+      ep-colored="primary"
+      class="float-right"
+      type="button"
+      [disabled]="!searchForm.valid"
+      (click)="onExport()">
+      {{ 'AUDITING.CRITERIA_FORM_ACTIONS.BTN_EXPORT' | translate }}
+    </button>
+  </div>
+</div>

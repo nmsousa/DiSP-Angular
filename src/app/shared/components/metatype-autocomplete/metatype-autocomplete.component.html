@@ -1,0 +1,12 @@
+<app-autocomplete
+  [placeHolder]="'METATYPE.AUTOCOMPLETE.PLACEHOLDER'"
+  [labelField]="'name'"
+  [valueField]="'id'"
+  [labelId]="'id'"
+  [inputValue]="inputValue"
+  [options]="options"
+  [isLoading]="isLoading"
+  (searchChange)="onSearchChange($event)"
+  (selectionChange)="onSelectionChange($event)"
+  (clear)="onClear()">
+</app-autocomplete>

@@ -1,0 +1,46 @@
+<ep-modal
+  id="templates-modal"
+  epWrapClassName="vertical-center-modal"
+  [epVisible]="isVisible"
+  [epTitle]="modalTitle"
+  [epContent]="modalContent"
+  [epFooter]="modalFooter"
+  (epOnCancel)="onCancel()">
+
+  <ng-template #modalTitle>
+    {{ title | translate }}
+  </ng-template>
+
+  <ng-template #modalContent>
+
+    <nz-list nzBordered nzSize="small" [nzItemLayout]="'horizontal'" nzNoResult=" " [nzLoading]="isLoading">
+    <nz-list-item *ngFor="let item of templates"
+      (click)="onSelectedTemplate(item)" [class.selected]="item === selectedTemplate">
+
+      <!-- Label -->
+      <nz-list-item-meta [nzTitle]="item?.content.title">
+      </nz-list-item-meta>
+
+    </nz-list-item>
+
+  </nz-list>
+
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <!-- Cancel -->
+    <button ep-button ep-theme="ant" ep-colored="" (click)="onCancel()">
+      {{ 'TEMPLATES.MODAL.MODAL.BTN_CANCEL' | translate }}
+    </button>
+    <!-- Confirm -->
+    <button
+      ep-button
+      ep-theme="ant"
+      ep-colored="primary"
+      (click)="onConfirm()"
+      [disabled]="!selectedTemplate">
+      {{ 'TEMPLATES.MODAL.MODAL.BTN_CONFIRM' | translate }}
+    </button>
+  </ng-template>
+
+</ep-modal>

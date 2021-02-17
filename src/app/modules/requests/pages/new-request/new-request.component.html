@@ -1,0 +1,13 @@
+<!-- Header -->
+<div class="row">
+  <div class="col">
+    <h2>{{ 'NEW_REQUEST.HEADER' | translate }}</h2>
+  </div>
+</div>
+
+<hr />
+
+<!-- Main Informations -->
+<app-edit-request-generic-content [isNew]="true" [deadlineTime]="deadlineTime"
+  (formCreated)="onFormCreated($event)" (onSave)="onSaveHandler($event)" (onChanges)="onChanges($event)">
+</app-edit-request-generic-content>

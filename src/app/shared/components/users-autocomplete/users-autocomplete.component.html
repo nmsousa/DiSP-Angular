@@ -1,0 +1,13 @@
+<app-autocomplete
+  [placeHolder]="'USERS.AUTOCOMPLETE.PLACEHOLDER'"
+  [labelField]="'fullName'"
+  [valueField]="'username'"
+  [labelId]="'epId'"
+  idTranslation="{{ 'USERS.AUTOCOMPLETE.ID_TRANSLATION' | translate }}"
+  [options]="options"
+  [isLoading]="isLoading"
+  [clearAfterSelection]="clearAfterSelection"
+  (searchChange)="onSearchChange($event)"
+  (selectionChange)="onUserSelectionChange($event)"
+  [formControl]="control">
+</app-autocomplete>

@@ -1,0 +1,20 @@
+<app-token-step-one [user]="user$" *ngIf="stepStatus === 1" (stepComplete)="onStepOneComplete($event)"></app-token-step-one>
+
+<app-token-step-two [user]="user$" [radiusState]="radiusState" *ngIf="stepStatus === 2" (stepComplete)="onStepTwoComplete($event)"></app-token-step-two>
+
+<div id="help">
+  <a (click)="isHelpModalVisible = true">{{ 'TOKEN.HELP' | translate }}</a>
+
+  <!-- Purge Modal -->
+  <ep-modal
+    id="help-modal"
+    [(epVisible)]="isHelpModalVisible"
+    epTitle="{{ 'TOKEN.HELP_MODAL.TITLE' | translate }}"
+    (epOnCancel)="isHelpModalVisible = false"
+    (epOnOk)="isHelpModalVisible = false"
+    (epAfterClose)="isHelpModalVisible = false">
+
+    <app-token-help-modal></app-token-help-modal>
+
+  </ep-modal>
+</div>

@@ -1,0 +1,10 @@
+<app-autocomplete
+  [placeHolder]="'AUDITING_EVENT_TYPE.AUTOCOMPLETE.PLACEHOLDER'"
+  [labelField]="'key'"
+  [valueField]="'id'"
+  [options]="options"
+  [isLoading]="isLoading"
+  (searchChange)="onSearchChange($event)"
+  (selectionChange)="onSelectionChange($event)"
+  [formControl]="control">
+</app-autocomplete>

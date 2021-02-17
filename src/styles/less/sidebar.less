@@ -1,0 +1,68 @@
+ep-sidebar {
+  border-width: 0px;
+
+  /* To remove sidebar menu scroll */
+  .ant-menu-root {
+    max-height: 100% !important;
+  }
+}
+hr {
+  background: #ddd;
+}
+
+.disp__sidebar {
+  h1 {
+    color: @white !important;
+    font-size: 3.5em;
+    font-weight: 300;
+    padding-left: 3rem;
+    letter-spacing: 5px;
+  }
+  .ant-menu-dark {
+    background: transparent;
+    .ant-menu-item {
+      height: 45px;
+      line-height: 45px;
+      &:hover {
+        color: #f0dd53 !important;
+      }
+      &-selected {
+        background: transparent !important;
+        color: #f0dd53;
+        font-weight: 600;
+      }
+    }
+  }
+  ul.ant-menu {
+    > li.ant-menu-item {
+      font-size: 1.2em !important;
+      padding-left: 3rem !important;
+    }
+    > li.ant-menu-submenu-inline {
+      // padding-top: 1rem;
+      // padding-bottom: 1rem;
+      .ant-menu-submenu-title {
+        font-size: 1.2em !important;
+        padding-left: 3rem !important;
+      }
+      .ant-menu-sub {
+        background: #1e1f34;
+        li {
+          padding-left: 3rem !important;
+          font-size: 1.2em !important;
+        }
+      }
+    }
+    > li.ant-menu-submenu-open {
+      .ant-menu-submenu-title {
+        color: @contrastColor;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+      .ant-menu-sub {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+      }
+    }
+  }
+}

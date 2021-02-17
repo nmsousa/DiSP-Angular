@@ -1,0 +1,42 @@
+<!-- Header -->
+<div class="row">
+  <div class="col">
+    <h2>{{ 'LATEST_REQUESTS.HEADER' | translate }}</h2>
+  </div>
+  <!-- Change Single/Group Request View -->
+  <div class="col">
+    <button
+      ep-button
+      ep-colored="primary"
+      ep-theme="ant"
+      class="float-right"
+      [epLoading]="isLoading"
+      (click)="onGroupingViewClicked()">
+      {{ (showSingleGrouping ? 'LATEST_REQUESTS.BTN.GROUP_VIEW' : 'LATEST_REQUESTS.BTN.SINGLE_VIEW') | translate | uppercase }}
+    </button>
+  </div>
+</div>
+
+<hr />
+
+<!-- Actions -->
+<app-requests-actions-bar *ngIf="showSingleGrouping"></app-requests-actions-bar>
+
+<hr *ngIf="showSingleGrouping"/>
+
+<!-- Table -->
+<div class="row">
+  <div class="col">
+
+    <!-- Single request view -->
+    <app-requests-table *ngIf="showSingleGrouping"
+                        [columns]="columns"
+                        [sortConfig]="sortConfig"
+                        (loaded)="onLoadedViewRecords()"></app-requests-table>
+
+    <!-- Group request view -->
+    <app-lot-groups-requests *ngIf="!showSingleGrouping"
+                             (loaded)="onLoadedViewRecords()"></app-lot-groups-requests>
+
+  </div>
+</div>

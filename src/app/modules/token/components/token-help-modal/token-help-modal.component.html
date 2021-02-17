@@ -1,0 +1,32 @@
+<div id="body">
+
+  <div id="header">
+
+    <div id="logoEP">
+      <img class="ep-logo-img" src="assets/ep-logo-token.png" alt="EP Logo">
+    </div>
+
+    <div id="title">
+      <h1>
+        {{ 'TOKEN.HELP_MODAL.TITLE' | translate }}
+      </h1>
+    </div>
+
+  </div>
+
+  <div id="intro_text">
+    <p class="allow-linebreaks">
+      {{ 'TOKEN.HELP_MODAL.INTRO_TEXT' | translate }}
+    </p>
+  </div>
+
+  <div class="faq" *ngFor="let i of [1, 2, 3, 4, 5, 6]" >
+    <p class="question">
+      Q: {{ ('TOKEN.HELP_MODAL.QA.Q' + i) | translate }}
+    </p>
+    <p class="answer">
+      A: {{ ('TOKEN.HELP_MODAL.QA.A' + i) | translate }}
+    </p>
+  </div>
+
+</div>

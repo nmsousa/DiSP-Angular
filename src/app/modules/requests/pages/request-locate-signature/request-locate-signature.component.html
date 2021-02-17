@@ -1,0 +1,118 @@
+<div class="row">
+
+  <!-- Left Panel -->
+  <div class="col-12 col-md-8">
+
+    <!-- Loading icon -->
+    <div class="pdf-spinner-container" *ngIf="isLoading">
+      <nz-spin nzSimple [nzSize]="'large'" class="loading-spinner"></nz-spin>
+    </div>
+
+    
+    <perfect-scrollbar #perfectScrollBarRef 
+      class="placeholder-boundary" *ngIf="!isLoading" (psScrollY)="onScrollEvent($event)"
+      style.width="{{ pageWidth + 16 + 'px' }}">
+      
+      <!-- PlaceHolder -->
+
+      <img
+        #placeholder
+        [src]="'assets/visual_stamp_placeholder.svg'"
+        [style.opacity]="placeHolderVisible ? '1' : '0'"
+        class="placeholder" cdkDrag cdkDragBoundary=".placeholder-boundary"
+        (cdkDragEnded)="dragEnded($event)">
+
+      <!-- PDF Viewer -->
+
+      <pdf-viewer #pdfViewerComponentRef
+        [src]="pdfSrc" [original-size]="true" [show-all]="true" [show-borders]="true"
+        [stick-to-page]="true"
+        [autoresize]="false"
+        [zoom]="zoom_levels[zoomIndex]"
+        (page-rendered)="pageRendered($event)"
+        (after-load-complete)="afterLoadComplete($event)"></pdf-viewer>
+     
+      <!-- Zoom -->
+
+      <div class="zoom-value-container">
+        <span>
+          {{ zoom_levels[zoomIndex] * 100 }}%
+        </span>
+      </div>
+
+      <div class="zoom-icons-container">
+        <span class="zoom-icon mr-1" (click)="zoomIn()">
+          <i nz-icon nzType="zoom-in" nzTheme="outline"></i>
+        </span>
+
+        <span class="zoom-icon" (click)="zoomOut()">
+          <i nz-icon nzType="zoom-out" nzTheme="outline"></i>
+        </span>
+      </div>
+
+    </perfect-scrollbar>
+    
+  </div>
+
+  <!-- Right Panel -->
+  <div class="col-12 col-md-4">
+
+    <div class="row d-block">
+      <div>{{ 'REQUEST.LOCATE_SIGNATURE.INFO_PANEL.BTN_ADD_VISUALSTAMP.DESCRIPTION' | translate }}</div>
+
+      <br>
+
+      <button ep-button ep-theme="ant" ep-colored="primary" type="button"
+        (click)="placeHolderVisible = !placeHolderVisible; autoPositionPlaceholder();" [disabled]="placeHolderVisible">
+        {{ 'REQUEST.LOCATE_SIGNATURE.INFO_PANEL.BTN_ADD_VISUALSTAMP' | translate | uppercase }}
+      </button>
+
+      <br><br>
+
+      <div [innerHTML]="'REQUEST.LOCATE_SIGNATURE.INFO_PANEL.VISUALSTAMP_NOTE' | translate">
+      </div>
+
+      <br><br>
+
+      <div
+        [innerHTML]="'REQUEST.LOCATE_SIGNATURE.INFO_PANEL.TOTAL_PAGES' | translate:{totalPages: numPages}">
+      </div>
+      <div
+        [innerHTML]="'REQUEST.LOCATE_SIGNATURE.INFO_PANEL.CURRENT_PAGE' | translate:{currentPage: page}">
+      </div>
+      <div
+        [innerHTML]="'REQUEST.LOCATE_SIGNATURE.INFO_PANEL.VISUALSTAMP_LOCATION.VALUE' | translate:{barcodeLocation: barcodeLocation}">
+      </div>
+
+      <br><br>
+
+      <div [style.marginBottom.px]="50">
+        <div [innerHTML]="'REQUEST.LOCATE_SIGNATURE.INFO_PANEL.VISUALSTAMP_LOCATION.INFO_1' | translate"></div>
+        <br>
+        <div [innerHTML]="'REQUEST.LOCATE_SIGNATURE.INFO_PANEL.VISUALSTAMP_LOCATION.INFO_2' | translate"></div>
+        <br>
+        <div [innerHTML]="'REQUEST.LOCATE_SIGNATURE.INFO_PANEL.VISUALSTAMP_LOCATION.INFO_3' | translate"></div>
+        <br>
+        <div [innerHTML]="'REQUEST.LOCATE_SIGNATURE.INFO_PANEL.VISUALSTAMP_LOCATION.INFO_4' | translate"></div>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+
+<div class="floating-btns-container">
+  <!-- Save button -->
+  <button ep-button ep-theme="ant" ep-colored="primary" type="button"
+    class="save-btn" (click)="onSaveHandler()">
+    <i nz-icon nzType="save" nzTheme="outline" class="mr-2"></i>
+    {{ 'NEW_TEMPLATE.METADATA.SAVE' | translate | uppercase }}
+  </button>
+
+  <!-- Cancel button -->
+  <button ep-button ep-theme="ant" type="button"
+    class="cancel-btn ml-3" (click)="onCancel()">
+    {{ 'EDIT_TEMPLATE.BTN_CANCEL' | translate | uppercase }}
+  </button>
+</div>

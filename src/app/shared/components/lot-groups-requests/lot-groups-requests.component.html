@@ -1,0 +1,40 @@
+<div class="align-column-right">
+
+  <!-- LOT FILTER -->
+  <app-lot-autocomplete
+    class="col-xs-12 col-md-3 pr-0 mb-3"
+    (selectionChange)="filterByLot($event)"
+    (clear)="clearLotRef()">
+  </app-lot-autocomplete>
+
+  <nz-pagination
+    nzShowSizeChanger
+    [nzPageSizeOptions]="[5, 10, 25]"
+    [nzTotal]="totalRecords"
+    [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize"
+    (nzPageIndexChange)="pageIndexChange($event)"
+    (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
+
+</div>
+
+
+<div class="row">
+  <div class="col">
+
+    <!-- Lot Groups Accordion -->
+    <ep-accordion-group *ngIf="!isLoading">
+      <ep-accordion *ngFor="let lot of lots; first as isFirst"
+                    epTitle="{{ lot?.content?.id + ' - ' + ('LOT_GROUP_REQUESTS.ACCORDION.HEADER.REF' | translate) + '  ' + lot?.content?.lotName }}"
+                    [epCollapsed]="!isFirst">
+        <app-lot-requests-table [requests]="lot?.content?.requests" [externalApplication]="lot?.content?.externalApplication?.name"></app-lot-requests-table>
+      </ep-accordion>
+    </ep-accordion-group>
+
+    <!-- Loading -->
+    <div class="text-center mt-5">
+      <nz-spin nzSimple [nzSize]="'large'" *ngIf="isLoading"></nz-spin>
+    </div>
+
+  </div>
+</div>

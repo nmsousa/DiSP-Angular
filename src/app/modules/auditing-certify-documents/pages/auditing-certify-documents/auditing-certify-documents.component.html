@@ -1,0 +1,154 @@
+<!-- Header -->
+<div class="row">
+  <div class="col">
+    <h2>{{ 'AUDITING_CERTIFY_DOCUMENTS.HEADER' | translate }}</h2>
+  </div>
+</div>
+
+<hr/>
+
+<ep-accordion-group>
+
+  <ep-accordion #searchCriteriaAccordion id="auditing-search-criteria" epTitle="{{ 'AUDITING_CERTIFY_DOCUMENTS.SEARCH_CRITERIA.HEADER' | translate }}">
+
+    <form nz-form [nzLayout]="'vertical'" [formGroup]="searchForm">
+
+      <!-- Row 1 -->
+      <div class="row">
+
+        <!-- From -->
+        <div class="col-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'AUDITING_CERTIFY_DOCUMENTS.CRITERIA.START_DATE' | translate }}</nz-form-label>
+            <nz-form-control [nzValidateStatus]="searchForm.get('occurredDate_From').errors || searchForm.hasError('dateRangeError') ? 'error' : ''">
+              <nz-date-picker
+                formControlName="occurredDate_From" [nzFormat]="'dd/MM/yyyy'" [nzDisabledDate]="disableFutureDates">
+              </nz-date-picker>
+              <span *ngIf="searchForm.hasError('dateRangeError')" class="text-danger">
+                {{ 'AUDITING_CERTIFY_DOCUMENTS.CRITERIA.ERROR.LOWER_DATE' | translate }}</span>
+              <span *ngIf="searchForm.get('occurredDate_From').hasError('required')" class="text-danger">
+                {{ 'AUDITING_CERTIFY_DOCUMENTS.CRITERIA.ERROR.REQUIRED_DATE' | translate }}</span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- To -->
+        <div class="col-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'AUDITING_CERTIFY_DOCUMENTS.CRITERIA.END_DATE' | translate }}</nz-form-label>
+            <nz-form-control [nzValidateStatus]="searchForm.get('occurredDate_To').errors || searchForm.hasError('dateRangeError') ? 'error' : ''">
+              <nz-date-picker formControlName="occurredDate_To" [nzFormat]="'dd/MM/yyyy'" [nzDisabledDate]="disableFutureDates">
+              </nz-date-picker>
+              <span *ngIf="searchForm.hasError('dateRangeError')" class="text-danger">
+                  {{ 'AUDITING_CERTIFY_DOCUMENTS.CRITERIA.ERROR.GREATER_DATE' | translate }}</span>
+              <span *ngIf="searchForm.get('occurredDate_To').hasError('required')" class="text-danger">
+                {{ 'AUDITING_CERTIFY_DOCUMENTS.CRITERIA.ERROR.REQUIRED_DATE' | translate }}</span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- Filename -->
+        <div class="col-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label nzFor="filename">{{ 'AUDITING_CERTIFY_DOCUMENTS.CRITERIA.FILENAME' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input id="filename" ep-input type="text" formControlName="filename"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- External Application -->
+        <div class="col-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label nzFor="externalApp">{{ 'AUDITING_CERTIFY_DOCUMENTS.CRITERIA.EXTERNAL_APP' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input id="externalApp" ep-input type="text" formControlName="externalApplication.name"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- User -->
+        <div class="col-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label>{{ 'AUDITING_CERTIFY_DOCUMENTS.CRITERIA.USERNAME' | translate }}</nz-form-label>
+              <app-users-autocomplete [control]="searchForm?.controls['username']" [valueField]="'username'"></app-users-autocomplete>
+          </nz-form-item>
+        </div>
+
+      </div>
+
+      <!-- Criteria Form Actions-->
+      <app-criteria-form-actions
+        [searchForm]="searchForm"
+        (search)="onSearch()"
+        (clearSearch)="onClearSearch()"
+        (export)="onExport()">
+      </app-criteria-form-actions>
+
+    </form>
+
+  </ep-accordion>
+
+  <!-- Table -->
+  <ep-accordion id="auditing-results" #resultsAccordion epTitle="{{ 'AUDITING_CERTIFY_DOCUMENTS.RESULTS.HEADER' | translate }}" [epCollapsed]="true">
+    <div class="row">
+      <div class="col">
+
+        <nz-table
+          class="auditing-table"
+          #auditsTable
+          [nzData]="audits"
+          nzShowSizeChanger
+          [nzPageSizeOptions]="[5, 10, 25]"
+          [nzFrontPagination]="false"
+          [nzLoading]="isLoading"
+          [nzTotal]="totalRecords"
+          [(nzPageIndex)]="pageIndex"
+          [nzPageSize]="pageSize"
+          (nzPageIndexChange)="pageIndexChange($event)"
+          (nzPageSizeChange)="pageSizeChange($event)">
+
+          <thead (nzSortChange)="sort($event)" nzSingleSort>
+          <tr>
+            <th nzShowSort nzSortKey="level">{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.LEVEL' | translate }}</th>
+            <th nzShowSort nzSortKey="externalApplication.name">{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.EXTERNAL_APP' | translate }}</th>
+            <th nzShowSort nzSortKey="username">{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.USERNAME' | translate }}</th>
+            <th nzShowSort nzSortKey="filename">{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.FILENAME' | translate }}</th>
+            <th nzShowSort nzSortKey="description">{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.DESCRIPTION' | translate }}</th>
+            <th nzShowSort nzSortKey="hash" width="160px">{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.HASH' | translate }}</th>
+            <th nzShowSort nzSortKey="dateOccured">{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.OCCURRED_DATE' | translate }}</th>
+            <th nzShowSort nzSortKey="originalFileSize">{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.ORIG_FILE_SIZE' | translate }}</th>
+            <th nzShowSort nzSortKey="signedFileSize">{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.SIGNED_FILE_SIZE' | translate }}</th>
+            <th nzShowSort nzSortKey="certificationPermission">{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.CERTIFICATION_PERMISSION' | translate }}</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let data of auditsTable.data">
+            <td attr.data-label="{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.LEVEL' | translate }}">
+              <span [ngClass]="{
+                'text-success': data?.content?.level === 'SUCCESS',
+                'text-warning': data?.content?.level === 'INFO',
+                'text-danger': data?.content?.level === 'ERROR'}">{{ data?.content?.level }}</span></td>
+            <td attr.data-label="{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.EXTERNAL_APP' | translate }}">{{ data?.content?.externalApplication?.name }}</td>
+            <td attr.data-label="{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.USERNAME' | translate }}">{{ data?.content?.username }}</td>
+            <td attr.data-label="{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.FILENAME' | translate }}">{{ data?.content?.filename }}</td>
+            <td attr.data-label="{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.DESCRIPTION' | translate }}">{{ data?.content?.description }}</td>
+            <td attr.data-label="{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.HASH' | translate }}" class="text-break">{{ data?.content?.hash }}</td>
+            <td attr.data-label="{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.OCCURRED_DATE' | translate }}" nz-tooltip nzTitle="{{ data?.content?.dateOccured }}">
+              {{ data?.content?.dateOccured | dateFromDatetime }}</td>
+            <td attr.data-label="{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.ORIG_FILE_SIZE' | translate }}">{{ data?.content?.originalFileSize | filesize }}</td>
+            <td attr.data-label="{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.SIGNED_FILE_SIZE' | translate }}">{{ data?.content?.signedFileSize | filesize }}</td>
+            <td attr.data-label="{{ 'AUDITING_CERTIFY_DOCUMENTS.TABLE.HEADER.CERTIFICATION_PERMISSION' | translate }}">{{ data?.content?.certificationPermission }}</td>
+          </tr>
+
+          </tbody>
+
+        </nz-table>
+
+      </div>
+    </div>
+  </ep-accordion>
+
+</ep-accordion-group>
+

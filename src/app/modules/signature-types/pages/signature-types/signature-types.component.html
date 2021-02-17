@@ -1,0 +1,139 @@
+<div class="row">
+  <div class="col">
+    <h2>{{ 'SIGNATURE_TYPES.HEADER' | translate }}</h2>
+  </div>
+</div>
+<hr/>
+<div class="row">
+  <div class="col">
+    <ep-accordion-group>
+      <ep-accordion *ngFor="let type of (signatureTypes$ | async)?.content" [epTitle]="type.content.name">
+
+        <!-- General -->
+        <ep-accordion [epTitle]="'SIGNATURE_TYPES.GENERAL' | translate">
+
+          <table cellpadding="10">
+            <tbody>
+            <!-- Key Type -->
+            <tr>
+              <td>{{ 'SIGNATURE_TYPES.GENERAL.KEY_TYPE' | translate }}:</td>
+              <td>{{ type.content.keyType.name }}
+              </td>
+            </tr>
+            <!-- Deadline Type -->
+            <tr>
+              <td>{{ 'SIGNATURE_TYPES.GENERAL.DEADLINE_TYPE' | translate }}:</td>
+              <td>{{ 'SIGNATURE_TYPES.GENERAL.DEADLINE_TYPE.' + type.content.deadlineType | translate }}</td>
+            </tr>
+            <!-- Workflow Type -->
+            <tr>
+              <td>{{ 'SIGNATURE_TYPES.GENERAL.WORKFLOW_TYPE' | translate }}:</td>
+              <td>{{ 'SIGNATURE_TYPES.GENERAL.WORKFLOW_TYPE.' + type.content.workflowType | translate }}</td>
+            </tr>
+            <!-- Visible -->
+            <tr>
+              <td>{{ 'SIGNATURE_TYPES.GENERAL.VISIBLE' | translate }}:</td>
+              <td><input type="checkbox" *epSwitch="{ type:'rounded', size: 'sm' }" [ngModel]="type.content.visible"
+                         attr.aria-label="{{ 'SIGNATURE_TYPES.GENERAL.VISIBLE' | translate }}"
+                         (change)="onChangeVisibility($event, type.content)"/></td>
+            </tr>
+            <!-- Active -->
+            <tr>
+              <td>{{ 'SIGNATURE_TYPES.GENERAL.ACTIVE' | translate }}:</td>
+              <td><input type="checkbox" *epSwitch="{ type:'rounded', size: 'sm' }" [ngModel]="type.content.status"
+                         attr.aria-label="{{ 'SIGNATURE_TYPES.GENERAL.ACTIVE' | translate }}"
+                         (change)="onChangeStatus($event, type.content)"/></td>
+            </tr>
+            </tbody>
+          </table>
+
+        </ep-accordion>
+
+        <!-- Allowed groups to sign -->
+        <ep-accordion [epTitle]="'SIGNATURE_TYPES.SIGNATORIES' | translate">
+
+          <table cellpadding="10">
+            <tbody>
+            <!-- Allowed groups to sign -->
+            <tr>
+              <td>{{ 'SIGNATURE_TYPES.SIGNATORIES.ALLOWED_GROUPS_TO_SIGN' | translate }}:</td>
+              <td>
+                <span *ngFor="let allowedGroup of type.content?.allowedGroups">
+                  <ep-label epStatus="primary" *ngIf="allowedGroup?.group?.fullName">
+                  {{ allowedGroup?.group?.fullName }}
+                  </ep-label>
+                </span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+        </ep-accordion>
+
+        <!-- Signature mode -->
+        <ep-accordion [epTitle]="'SIGNATURE_TYPES.SIGNATURE_MODE' | translate">
+
+          <table cellpadding="10">
+            <tbody>
+            <!-- Allowed groups to sign -->
+            <tr>
+              <td>{{ 'SIGNATURE_TYPES.SIGNATURE_MODE.ALLOWED_SIGNATURE_MODES' | translate }}:</td>
+              <td>
+                <span *ngFor="let allowedMode of type.content?.allowedModes">
+                  <ep-label epStatus="primary" *ngIf="allowedMode?.signatureMode?.name">
+                  {{ allowedMode?.signatureMode?.name }}
+                  </ep-label>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td>{{ 'SIGNATURE_TYPES.SIGNATURE_MODE.RECOMMENDED' | translate }}:</td>
+              <td>
+                <ep-label epStatus="primary" *ngIf="getRecommendedSignatureModeName(type.content)">
+                  {{ getRecommendedSignatureModeName(type.content) }}
+                </ep-label>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+        </ep-accordion>
+
+        <!-- General checks -->
+        <ep-accordion [epTitle]="'SIGNATURE_TYPES.GENERAL_CHECKS' | translate">
+
+          <table cellpadding="10">
+            <tbody>
+            <!-- File read before signature -->
+            <tr>
+              <td>{{ 'SIGNATURE_TYPES.GENERAL_CHECKS.FILE_READ_BEFORE_SIGNATURE' | translate }}:</td>
+              <td>
+                <input type="checkbox" *epSwitch="{ type:'rounded', size: 'sm' }" [ngModel]="type.content?.fileRead"
+                       attr.aria-label="{{ 'SIGNATURE_TYPES.GENERAL_CHECKS.FILE_READ_BEFORE_SIGNATURE' | translate }}" disabled/>
+              </td>
+            </tr>
+            <!-- Signature with EP -->
+            <tr>
+              <td>{{ 'SIGNATURE_TYPES.GENERAL_CHECKS.SIGNATURE_WITH_EP' | translate }}:</td>
+              <td>
+                <input type="checkbox" *epSwitch="{ type:'rounded', size: 'sm' }" [ngModel]="type.content?.ipCheck"
+                       attr.aria-label="{{ 'SIGNATURE_TYPES.GENERAL_CHECKS.SIGNATURE_WITH_EP' | translate }}" disabled/>
+              </td>
+            </tr>
+            <!-- Sensitive data -->
+            <tr>
+              <td>{{ 'SIGNATURE_TYPES.GENERAL_CHECKS.SENSITIVE_DATA' | translate }}:</td>
+              <td>
+                <input type="checkbox" *epSwitch="{ type:'rounded', size: 'sm' }" [ngModel]="type.content?.isProtected"
+                       attr.aria-label="{{ 'SIGNATURE_TYPES.GENERAL_CHECKS.SENSITIVE_DATA' | translate }}" disabled/>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+        </ep-accordion>
+
+      </ep-accordion>
+    </ep-accordion-group>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<ep-topbar
+  (clickTrigger)="onClickCollapse()"
+  [showTrigger]="true"
+  [flexAlign]="'space-between'"
+  [background]="'#fff'"
+  [theme]="'ligth'">
+  <div class="iter-tb-container">
+    <div>
+      <ep-select
+        [(ngModel)]="language"
+        (ngModelChange)="onLanguageChange()"
+        epPlaceHolder="Language"
+        class="ml-3">
+        <ep-option [epValue]="'en'" epLabel="EN"></ep-option>
+        <ep-option [epValue]="'de'" epLabel="DE"></ep-option>
+        <ep-option [epValue]="'fr'" epLabel="FR"></ep-option>
+      </ep-select>
+    </div>
+    <div class="aux-topbarmenu-left">
+      <span (click)="onSwitchOldUI()">
+        <p>DiSP 2.13.0</p>
+      </span>
+      <span (click)="navigateToTokenPage()">
+        <img src="assets/token_secure_access_{{authenticationStatus}}.png" alt="DiSP Access Token"
+          [ngStyle]="{'cursor': authenticationStatus === 'on' ? 'auto' : 'pointer'}">
+      </span>
+
+      <div class="aux-topbarmenu-right">
+        <!-- <form [formGroup]="form" class="searchbox">
+          <ep-input-material
+            label="Search..."
+            name="search"
+            type="text"
+            formControlName="search"
+            icon="search"
+          ></ep-input-material>
+        </form> -->
+
+        <ep-dropdown [epTrigger]="'click'" [epPlacement]="'bottomRight'">
+          <a ep-dropdown>
+            <i nz-icon nzType="user" theme="outline" class="mr-2"></i>{{ (user$ | async)?.content?.fullName }}
+            <i nz-icon nzType="caret-down" theme="outline" class="ml-2"></i>
+          </a>
+          <ul ep-menu>
+            <li ep-menu-item><i nz-icon nzType="setting"></i>Settings</li>
+            <li ep-menu-item><i nz-icon nzType="logout"></i>Logout</li>
+          </ul>
+        </ep-dropdown>
+      </div>
+    </div>
+  </div>
+</ep-topbar>

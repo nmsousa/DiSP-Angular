@@ -1,0 +1,105 @@
+<div class="row">
+  <div class="col">
+    <h2 class="d-inline-block mr-4">{{ template?.title }}</h2>
+    <span class="d-inline-block template-status-label" *ngIf="template" [ngClass]="{
+      'draft-color': template?.status,
+      'text-danger': !template?.status}">
+      {{ template?.status ? 'Enabled' : 'Disabled' }}
+    </span>
+  </div>
+</div>
+
+<hr />
+
+<div class="row">
+  <!-- Top buttons bar -->
+  <div class="col">
+    <!-- Edit Template -->
+    <button ep-button ep-colored="primary" ep-theme="ant" class="float-left" [routerLink]="'edit'">
+      {{ 'VIEW_TEMPLATE.BTN_EDIT' | translate | uppercase }}
+    </button>
+    <!-- Enable Template -->
+    <button ep-button ep-colored="success" ep-theme="ant" class="float-left ml-2" *ngIf="template?.status === 0"
+      (click)="onChangeTemplateStatus()">
+      {{ 'VIEW_TEMPLATE.BTN_ENABLE' | translate | uppercase }}
+    </button>
+    <!-- Disable Template -->
+    <button ep-button ep-colored="danger" ep-theme="ant" class="float-left ml-2" *ngIf="template?.status === 1"
+      (click)="onChangeTemplateStatus()">
+      {{ 'VIEW_TEMPLATE.BTN_DISABLE' | translate | uppercase }}
+    </button>
+  </div>
+
+  <div class="col">
+    <!-- Back -->
+    <button ep-button ep-colored="primary" ep-theme="ant" class="float-right" [routerLink]="'../'">
+      {{ 'GENERIC.BTN_BACK' | translate | uppercase }}
+    </button>
+  </div>
+</div>
+
+
+
+<hr />
+
+<!-- Signature Type -->
+<div class="row">
+  <div class="col-xs-12 col-sm-6">
+    <form nz-form [nzLayout]="'vertical'">
+      <nz-form-item>
+        <nz-form-label nzFor="signatureType" nzRequired class="d-inline-block">
+          {{ 'VIEW_TEMPLATE.MAIN_INFORMATION.SIGNATURE_TYPE' | translate }}
+          <i nz-icon nzType="info-circle" nzTheme="outline" class="form-field-info-icon" *ngIf="selectedSignatureType"
+            nz-popover nzPopoverTitle="Title"
+            (nzVisibleChange)="signatureTypeInfoPopupVisible = !signatureTypeInfoPopupVisible" nzTrigger="click"
+            [nzContent]="contentTemplateSignatureType">
+          </i>
+        </nz-form-label>
+
+        <!-- Signature Type Info Popup -->
+        <ng-template #contentTemplateSignatureType>
+          <app-signature-type-info [signatureType]="selectedSignatureType"
+            *ngIf="signatureTypeInfoPopupVisible"></app-signature-type-info>
+        </ng-template>
+
+
+        <nz-form-control>
+          <input id="signatureType" name="signatureType" ep-input type="text" [ngModel]="template?.signatureType?.name" readonly />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</div>
+
+<!-- Signatories -->
+<div class="row mb-3">
+  <div class="col">
+    <ep-accordion epTitle="{{ 'EDIT_TEMPLATE.SIGNATORIES.HEADER' | translate }}">
+      <app-persons-editable-list [persons]="signatories" (personsChanged)="signatories = $event" [isReadonly]="true">
+      </app-persons-editable-list>
+    </ep-accordion>
+  </div>
+</div>
+
+<!-- Security and Roles -->
+<div class="row mb-3">
+  <div class="col">
+    <ep-accordion epTitle="{{ 'EDIT_TEMPLATE.SECURITY_AND_ROLES.HEADER' | translate }}">
+      <p class="ant-upload-hint">{{ 'EDIT_TEMPLATE.SECURITY_AND_ROLES.LEGEND' | translate }}</p>
+      <app-persons-editable-list [persons]="securityAndRoles" (personsChanged)="securityAndRoles = $event"
+        [roles]="securityRoles" [isReadonly]="true">
+      </app-persons-editable-list>
+    </ep-accordion>
+  </div>
+</div>
+
+<!-- Template (Owners + Users) -->
+<div class="row mb-3">
+  <div class="col">
+    <ep-accordion epTitle="{{ 'EDIT_TEMPLATE.TEMPLATE.HEADER' | translate }}">
+      <app-persons-editable-list [persons]="templateUsersAndOwners" (personsChanged)="templateUsersAndOwners = $event"
+        [roles]="templateRoles" [isReadonly]="true">
+      </app-persons-editable-list>
+    </ep-accordion>
+  </div>
+</div>

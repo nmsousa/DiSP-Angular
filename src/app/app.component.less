@@ -1,0 +1,23 @@
+@import "../styles/less/variables.less";
+
+//content
+html,
+body,
+:host {
+  height: 100%;
+  display: grid;
+  width: 100%;
+  color: @mainTextColor;
+}
+:host {
+  .ant-layout {
+    min-height: 100%;
+  }
+  > nz-layout {
+    min-height: 100%;
+    nz-content {
+      padding: 24px;
+      background-color: @white;
+    }
+  }
+}

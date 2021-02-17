@@ -1,0 +1,44 @@
+@import "../../../../../styles/less/variables.less";
+
+.form-field-info {
+  color: @info-color;
+  cursor: pointer;
+  padding-left: 5px;
+  padding-top: 5px;
+}
+
+.ant-calendar-picker {
+  width: 100%;
+}
+
+.ant-time-picker {
+  width: 100%;
+}
+
+.deadline-divider {
+  margin-top: -15px;
+}
+
+.editable-row-operations a {
+  margin-right: 8px;
+}
+
+
+/* Responsivity */
+
+/* Desktop */
+
+.security-role-badge {
+  font-weight: normal;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+/* Mobile */
+
+@media screen and (max-width: 992px) {
+  .security-role-badge:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+
+}

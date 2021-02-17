@@ -1,0 +1,193 @@
+@import "./../../../../styles/less/variables.less";
+
+.ant-pagination-prev,
+.ant-pagination-next {
+  line-height: 26px !important;
+}
+
+.requests-table-pagination .ant-pagination {
+  padding-right: 0;
+}
+
+.requests-table-pagination .ant-pagination-options-size-changer.ant-select {
+  margin-right: 0;
+}
+
+.header {
+  h1 {
+    font-size: 4em !important;
+    font-weight: 300 !important;
+
+    span {
+      font-size: 0.85em !important;
+      color: rgb(100, 100, 100);
+    }
+  }
+
+  .ant-btn-circle {
+    border-radius: 3px;
+  }
+
+  .mdl-textfield__expandable-holder {
+    margin: 0;
+  }
+
+  .btn {
+    &.btn-link {
+      color: rgb(71, 71, 71);
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.mdl-button--primary {
+  background: transparent;
+
+  &:hover {
+    color: #0092c8;
+    background-color: transparent !important;
+  }
+}
+
+.requests-table th {
+  min-width: 120px;
+}
+
+.text-info {
+  color: #29b6f6 !important;
+}
+
+.anticon {
+  vertical-align: 0.125em;
+}
+
+/* ARCHIVED and PURGED icons */
+
+.archived-status-icons i {
+  font-size: 20px;
+}
+
+.archived-status-icons i:not(:first-child) {
+  margin-left: 10px;
+}
+
+
+.request-filters .ant-checkbox-wrapper {
+  margin-right: 10px;
+}
+
+.request-filters ep-select {
+  padding-left: 15px;
+  padding-right: 15px;
+  min-width: 120px;
+}
+
+.request-filters .mdl-textfield {
+  padding: 0;
+}
+
+.search-lot-btn .ant-btn-circle {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+
+/* Responsive status filter labels */
+
+/* Desktop */
+
+.status-labels-container {
+  display: block;
+}
+
+.lot-filter-autocomplete {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Mobile */
+
+@media screen and (max-width: 1200px) {
+  .status-labels-container {
+    display: grid;
+  }
+  .lot-filter-autocomplete {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+
+/* MCC Responsive mobile table from Oscar */
+
+@media screen and (max-width: 767px) {
+  ::ng-deep {
+    .requests-table {
+      table {
+        .ant-table-thead {
+          display: none;
+
+          tr {
+            border: 10px solid;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+          }
+        }
+
+        .ant-table-tbody {
+          > tr {
+            border: 1px solid #ddd;
+            margin-bottom: 2rem;
+            display: block;
+
+            &:hover {
+              > td {
+                background: none;
+              }
+            }
+
+            td {
+              border-bottom: 1px solid #ddd;
+              display: block;
+              font-size: 1em;
+              text-align: right;
+              font-weight: bold;
+
+              &:nth-child(3) {
+                display: none;
+              }
+
+              &:nth-child(4) {
+                display: none;
+              }
+
+              ul {
+                margin-top: 2em;
+              }
+
+              &:before {
+                content: attr(data-label);
+                float: left;
+                text-transform: uppercase;
+                font-weight: normal;
+                display: flex;
+                font-weight: 600;
+                color: #031798;
+                font-size: 0.85rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+

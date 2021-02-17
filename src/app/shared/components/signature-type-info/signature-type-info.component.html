@@ -1,0 +1,86 @@
+<div>
+  <ul>
+    <h3>{{ signatureType?.name }}</h3>
+
+    <hr>
+
+    <h4>{{ 'SIGNATURE_TYPES.GENERAL' | translate }}</h4>
+
+    <!-- Key Type -->
+    <li><b>{{ 'SIGNATURE_TYPES.GENERAL.KEY_TYPE' | translate }}</b>: {{ signatureType?.keyType?.name }}</li>
+
+    <!-- Deadline type -->
+    <li><b>{{ 'SIGNATURE_TYPES.GENERAL.DEADLINE_TYPE' | translate }}</b>:
+      {{ 'SIGNATURE_TYPES.GENERAL.DEADLINE_TYPE.' + signatureType?.deadlineType | translate }} </li>
+
+    <!-- Workflow Type -->
+    <li><b>{{ 'SIGNATURE_TYPES.GENERAL.WORKFLOW_TYPE' | translate}}</b>:
+      {{ 'SIGNATURE_TYPES.GENERAL.WORKFLOW_TYPE.' + signatureType?.workflowType | translate }}</li>
+
+    <br>
+
+
+    <h4>{{ 'SIGNATURE_TYPES.SIGNATORIES' | translate }}</h4>
+
+    <!-- Allowed groups -->
+    <li><b>{{ 'SIGNATURE_TYPES.SIGNATORIES.ALLOWED_GROUPS_TO_SIGN' | translate }}</b>:
+      <span *ngFor="let allowedGroup of signatureType?.allowedGroups">
+        <ep-label epStatus="primary" *ngIf="allowedGroup?.group?.fullName">
+          {{ allowedGroup?.group?.fullName }}
+        </ep-label>
+      </span>
+    </li>
+
+    <br>
+
+
+    <h4>{{ 'SIGNATURE_TYPES.SIGNATURE_MODE' | translate }}</h4>
+
+    <!-- Allowed Modes -->
+    <li><b>{{ 'SIGNATURE_TYPES.SIGNATURE_MODE.ALLOWED_SIGNATURE_MODES' | translate }}</b>:
+      <span *ngFor="let allowedMode of signatureType?.allowedModes">
+        <ep-label epStatus="primary" *ngIf="allowedMode?.signatureMode?.name">
+          {{ allowedMode?.signatureMode?.name }}
+        </ep-label>
+      </span>
+    </li>
+
+    <!-- Recommended -->
+    <li><b>{{ 'SIGNATURE_TYPES.SIGNATURE_MODE.RECOMMENDED' | translate }}</b>:
+      <ep-label epStatus="primary" *ngIf="getRecommendedSignatureModeName(signatureType)">
+        {{ getRecommendedSignatureModeName(signatureType) }}
+      </ep-label>
+    </li>
+
+    <br>
+
+    <h4>{{ 'SIGNATURE_TYPES.GENERAL_CHECKS' | translate }}</h4>
+
+
+    <li><b>{{ 'SIGNATURE_TYPES.GENERAL_CHECKS.SENSITIVE_DATA' | translate }}</b>:
+      <input
+        type="checkbox"
+        [ngModel]="signatureType?.isProtected"
+        *epSwitch="{ switchOnText: 'On', switchOffText: 'Off', type:'rounded', size: 'sm' }" disabled />
+    </li>
+
+    <!-- Remote IP Check -->
+    <li><b>{{ 'SIGNATURE_TYPES.GENERAL.REMOTE_IP_CHECK' | translate }}</b>:
+      <input type="checkbox" [ngModel]="signatureType?.ipCheck"
+        *epSwitch="{ switchOnText: 'On', switchOffText: 'Off', type:'rounded', size: 'sm' }" disabled />
+    </li>
+
+
+    <br>
+
+    <!-- Trusted Authorities -->
+    <li><b>{{ 'SIGNATURE_TYPES.GENERAL.TRUSTED_AUTHORITIES' | translate }}</b>:
+      <span *ngFor="let trustedAuthority of signatureType?.trustedAuthorities">
+        <ep-label epStatus="primary" *ngIf="trustedAuthority?.authority?.commonName">
+          {{ trustedAuthority?.authority?.commonName }}
+        </ep-label>
+      </span>
+    </li>
+
+  </ul>
+</div>

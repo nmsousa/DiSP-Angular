@@ -1,0 +1,59 @@
+<!-- Header -->
+<div class="row">
+  <div class="col">
+    <h2>{{ 'CERTIFY_DOCUMENT.HEADER' | translate }}</h2>
+  </div>
+</div>
+
+<hr />
+
+<ep-accordion epTitle="{{ 'CERTIFY_DOCUMENT.FORM.HEADER' | translate }}">
+
+  <form nz-form [nzLayout]="'vertical'" [formGroup]="form">
+
+    <!-- Info -->
+    <ep-alert class="intro-alert-info" [epDeletable]="false" epStatus="info" epTheme="accentBorder">
+      {{ 'CERTIFY_DOCUMENT.INTRO' | translate }}
+    </ep-alert>
+
+    <div class="col-xs-12 col-md-6 pl-0 pr-0">
+
+      <!-- File input -->
+      <nz-form-item>
+        <nz-form-label nzFor="fileInput" nzRequired>{{ 'CERTIFY_DOCUMENT.FORM.FILE' | translate }}</nz-form-label>
+        <nz-form-control>
+
+          <input #fileInput id="fileInput" type="file" class="w-100" (change)="onFileChange($event)" accept=".pdf" />
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <!-- Certification Permission -->
+    <div class="col-xs-12 col-md-6 pl-0 pr-0">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'CERTIFY_DOCUMENT.FORM.CERTIFICATION_PERMISSION' | translate }}</nz-form-label>
+        <nz-form-control>
+
+          <ep-select formControlName="certificationPermission"
+            epPlaceHolder="{{ 'SEARCH_REQUESTS.CRITERIA.REQUEST_STATUS.PLACEHOLDER' | translate }}">
+            <ep-option *ngFor="let certificationPermission of CertificationPermission | keyvalue"
+              epLabel="{{ 'CERTIFY_DOCUMENT.CERTIFICATION_PERMISSION.' + certificationPermission.key | translate }}"
+              [epValue]="certificationPermission.value">
+            </ep-option>
+          </ep-select>
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+  </form>
+
+  <!-- Certify Button -->
+  <button ep-button ep-theme="ant" ep-colored="primary" class="float-right mb-3" type="submit"
+    [epLoading]="isSaving" (click)="onCertify()"
+    [disabled]="form.invalid">
+    {{ 'CERTIFY_DOCUMENT.BTN_CERTIFY' | translate }}
+  </button>
+
+</ep-accordion>

@@ -1,0 +1,79 @@
+<div class="row header mb-3 request-filters" *ngIf="hasFiltersToolbar">
+
+  <!-- LEFT SIDE -->
+
+  <!-- STATUS FILTER -->
+  <div class="col-xs-12 col-md-7 status-labels-container">
+    <label
+      nz-checkbox
+      class="font-weight-bold"
+      [(ngModel)]="hasAllStatusFiltered"
+      (ngModelChange)="updateAllStatusChecked()"
+      [nzIndeterminate]="hasSomeStatusFiltered">{{ 'REQUESTS_TABLE.FILTER.STATUS.ALL' | translate | uppercase }}</label>
+
+    <label
+      nz-checkbox
+      class="font-weight-bold ml-0"
+      [(ngModel)]="status.checked"
+      (ngModelChange)="updateSingleStatusChecked()"
+      *ngFor="let status of statusFilterList"
+      ngClass="{{ status.value.toLowerCase() + '-color' }}">{{ status.label | translate | uppercase }}</label>
+  </div>
+
+  <!-- LOT FILTER -->
+  <app-lot-autocomplete
+    class="col-xs-12 col-xl-3 float-right lot-filter-autocomplete"
+    (selectionChange)="filterByLot($event)"
+    (clear)="clearLotRef()">
+  </app-lot-autocomplete>
+
+  <!-- DEADLINE FILTER -->
+  <ep-select epPlaceHolder="{{ 'REQUESTS_TABLE.FILTER.DEADLINE.PLACEHOLDER' | translate }}"
+             [(ngModel)]="selectedDeadlineFilter"
+             (ngModelChange)="filterByDeadline($event)" epAllowClear
+             class="col-xs-12 col-xl-2 float-right">
+    <ep-option [epValue]="MyDeadlineTypes.PLUSMINUSWEEK"
+               epLabel="{{ 'REQUESTS_TABLE.FILTER.DEADLINE.PLUSMINUSWEEK' | translate }}"></ep-option>
+    <ep-option [epValue]="MyDeadlineTypes.PAST"
+               epLabel="{{ 'REQUESTS_TABLE.FILTER.DEADLINE.PAST' | translate }}"></ep-option>
+    <ep-option [epValue]="MyDeadlineTypes.FUTURE"
+               epLabel="{{ 'REQUESTS_TABLE.FILTER.DEADLINE.FUTURE' | translate }}"></ep-option>
+    <ep-option [epValue]="MyDeadlineTypes.ALL"
+               epLabel="{{ 'REQUESTS_TABLE.FILTER.DEADLINE.ALL' | translate }}"></ep-option>
+  </ep-select>
+
+</div>
+
+<div align="right" class="requests-table-pagination mb-2">
+  <nz-pagination
+    nzShowSizeChanger
+    [nzPageSizeOptions]="[5, 10, 25]"
+    [nzTotal]="totalRecords"
+    [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize"
+    (nzPageIndexChange)="pageIndexChange($event)"
+    (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
+</div>
+
+  <!-- Requests table -->
+  <app-requests-table-content
+    [columns]="columns"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [records]="records"
+    [isLoading]="isLoading"
+    [hasRecordSelection]="true"
+    (sort)="sort($event)"
+    (checkedChange)="onCheckedChange($event)"></app-requests-table-content>
+
+<div class="row requests-table-pagination mt-2 mr-0 float-right">
+  <nz-pagination
+    nzShowSizeChanger
+    [nzPageSizeOptions]="[5, 10, 25]"
+    [nzTotal]="totalRecords"
+    [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize"
+    (nzPageIndexChange)="pageIndexChange($event)"
+    (nzPageSizeChange)="pageSizeChange($event)"
+    *ngIf="showBottomPaginator"></nz-pagination>
+</div>

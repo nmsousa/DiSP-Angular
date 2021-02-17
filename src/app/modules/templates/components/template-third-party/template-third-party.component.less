@@ -1,0 +1,29 @@
+@import "./../../../../../styles/less/variables.less";
+
+.remove-record-icon {
+  padding: 5px;
+  font-size: 16px;
+}
+
+nz-list {
+  min-height: 100px !important;
+  margin-bottom: 8px;
+}
+
+nz-list nz-list-item:nth-child(even) {
+  background: @gray-color; /* To make the background of the even rows light gray */
+}
+
+.add-record-btn:enabled {
+  color: #fff;
+  background-color: @info-color;
+  border-color: @info-color;
+}
+
+.add-record-btn:hover {
+  border-color: #1d70a8;
+}
+
+.is-invalid {
+  border: 1px solid red;
+}

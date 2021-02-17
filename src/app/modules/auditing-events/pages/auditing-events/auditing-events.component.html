@@ -1,0 +1,164 @@
+<!-- Header -->
+<div class="row">
+  <div class="col">
+    <h2>{{ 'AUDITING_EVENTS.HEADER' | translate }}</h2>
+  </div>
+</div>
+
+<hr/>
+
+<ep-accordion-group>
+
+  <ep-accordion #searchCriteriaAccordion id="auditing-search-criteria" epTitle="{{ 'AUDITING_EVENTS.SEARCH_CRITERIA.HEADER' | translate }}">
+
+    <form nz-form [nzLayout]="'vertical'" [formGroup]="searchForm">
+
+      <!-- Row 1 -->
+      <div class="row">
+
+        <!-- From -->
+        <div class="col-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'AUDITING_EVENTS.CRITERIA.START_DATE' | translate }}</nz-form-label>
+            <nz-form-control [nzValidateStatus]="searchForm.get('occurredDate_From').errors || searchForm.hasError('dateRangeError') ? 'error' : ''">
+              <nz-date-picker
+                formControlName="occurredDate_From" [nzFormat]="'dd/MM/yyyy'" [nzDisabledDate]="disableFutureDates">
+              </nz-date-picker>
+              <span *ngIf="searchForm.hasError('dateRangeError')" class="text-danger">
+                {{ 'AUDITING_EVENTS.CRITERIA.ERROR.LOWER_DATE' | translate }}</span>
+              <span *ngIf="searchForm.get('occurredDate_From').hasError('required')" class="text-danger">
+                {{ 'AUDITING_EVENTS.CRITERIA.ERROR.REQUIRED_DATE' | translate }}</span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- To -->
+        <div class="col-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'AUDITING_EVENTS.CRITERIA.END_DATE' | translate }}</nz-form-label>
+            <nz-form-control [nzValidateStatus]="searchForm.get('occurredDate_To').errors || searchForm.hasError('dateRangeError') ? 'error' : ''">
+              <nz-date-picker formControlName="occurredDate_To" [nzFormat]="'dd/MM/yyyy'" [nzDisabledDate]="disableFutureDates">
+              </nz-date-picker>
+              <span *ngIf="searchForm.hasError('dateRangeError')" class="text-danger">
+                  {{ 'AUDITING_EVENTS.CRITERIA.ERROR.GREATER_DATE' | translate }}</span>
+              <span *ngIf="searchForm.get('occurredDate_To').hasError('required')" class="text-danger">
+                {{ 'AUDITING_EVENTS.CRITERIA.ERROR.REQUIRED_DATE' | translate }}</span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- ID -->
+        <div class="col-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label nzFor="id">{{ 'AUDITING_EVENTS.CRITERIA.SR_ID' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input id="id" ep-input type="text" formControlName="requestId"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- Title -->
+        <div class="col-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label nzFor="title">{{ 'AUDITING_EVENTS.CRITERIA.SR_TITLE' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input id="title" ep-input type="text" formControlName="requestTitle"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- Event Type Autocomplete -->
+        <div class="col-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label>{{ 'AUDITING_EVENTS.CRITERIA.EVENT_TYPE' | translate }}</nz-form-label>
+              <app-auditing-event-types-autocomplete [control]="searchForm?.controls['type.id']"></app-auditing-event-types-autocomplete>
+          </nz-form-item>
+        </div>
+
+        <!-- User -->
+        <div class="col-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label>{{ 'AUDITING_EVENTS.CRITERIA.USERNAME' | translate }}</nz-form-label>
+              <app-users-autocomplete [control]="searchForm?.controls['username']" [valueField]="'username'"></app-users-autocomplete>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <!-- Criteria Form Actions -->
+      <app-criteria-form-actions
+        [searchForm]="searchForm"
+        (search)="onSearch()"
+        (clearSearch)="onClearSearch()"
+        (export)="onExport()">
+      </app-criteria-form-actions>
+
+    </form>
+
+  </ep-accordion>
+
+  <!-- Table -->
+  <ep-accordion id="auditing-results" #resultsAccordion epTitle="{{ 'AUDITING_EVENTS.RESULTS.HEADER' | translate }}" [epCollapsed]="true">
+    <div class="row">
+      <div class="col">
+
+        <nz-table
+          class="auditing-table"
+          #auditsTable
+          [nzData]="audits"
+          nzShowSizeChanger
+          [nzPageSizeOptions]="[5, 10, 25]"
+          [nzFrontPagination]="false"
+          [nzLoading]="isLoading"
+          [nzTotal]="totalRecords"
+          [(nzPageIndex)]="pageIndex"
+          [nzPageSize]="pageSize"
+          (nzPageIndexChange)="pageIndexChange($event)"
+          (nzPageSizeChange)="pageSizeChange($event)">
+
+          <thead (nzSortChange)="sort($event)" nzSingleSort>
+          <tr>
+            <th nzShowSort nzSortKey="type.key">{{ 'AUDITING_EVENTS.TABLE.HEADER.EVENT_TYPE' | translate }}</th>
+            <th nzShowSort nzSortKey="level">{{ 'AUDITING_EVENTS.TABLE.HEADER.LEVEL' | translate }}</th>
+            <th nzShowSort nzSortKey="requestId">{{ 'AUDITING_EVENTS.TABLE.HEADER.SR_ID' | translate }}</th>
+            <th nzShowSort nzSortKey="od.title">{{ 'AUDITING_EVENTS.TABLE.HEADER.SR_TITLE' | translate }}</th>
+            <th nzShowSort nzSortKey="r.deadline">{{ 'AUDITING_EVENTS.TABLE.HEADER.SR_DEADLINE' | translate }}</th>
+            <th nzShowSort nzSortKey="st.name">{{ 'AUDITING_EVENTS.TABLE.HEADER.SR_TYPE' | translate }}</th>
+            <th nzShowSort nzSortKey="occurredDate">{{ 'AUDITING_EVENTS.TABLE.HEADER.OCCURRED_DATE' | translate }}</th>
+            <th nzShowSort nzSortKey="username">{{ 'AUDITING_EVENTS.TABLE.HEADER.USERNAME' | translate }}</th>
+            <th>{{ 'AUDITING_EVENTS.TABLE.HEADER.GROUPS' | translate }}</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let data of auditsTable.data">
+            <td nz-tooltip nzTitle="{{ data?.content?.type?.key }}"
+            attr.data-label="{{ 'AUDITING_EVENTS.TABLE.HEADER.EVENT_TYPE' | translate }}">
+              {{ getEventTypeLabel(data?.content?.type?.key) | titlecase }}</td>
+            <td attr.data-label="{{ 'AUDITING_EVENTS.TABLE.HEADER.LEVEL' | translate }}">
+              <span [ngClass]="{
+                'text-success': data?.content?.level === 'SUCCESS',
+                'text-warning': data?.content?.level === 'INFO',
+                'text-danger': data?.content?.level === 'ERROR'}">{{ data?.content?.level }}</span></td>
+            <td attr.data-label="{{ 'AUDITING_EVENTS.TABLE.HEADER.SR_ID' | translate }}">{{ data?.content?.requestId }}</td>
+            <td attr.data-label="{{ 'AUDITING_EVENTS.TABLE.HEADER.SR_TITLE' | translate }}">{{ data?.content?.requestTitle }}</td>
+            <td nz-tooltip nzTitle="{{ data?.content?.requestDeadline }}"
+            attr.data-label="{{ 'AUDITING_EVENTS.TABLE.HEADER.SR_DEADLINE' | translate }}">
+              {{ data?.content?.requestDeadline | dateFromDatetime }}</td>
+            <td attr.data-label="{{ 'AUDITING_EVENTS.TABLE.HEADER.SR_TYPE' | translate }}">{{ data?.content?.signatureType }}</td>
+            <td nz-tooltip nzTitle="{{ data?.content?.occurredDate }}"
+            attr.data-label="{{ 'AUDITING_EVENTS.TABLE.HEADER.OCCURRED_DATE' | translate }}">
+              {{ data?.content?.occurredDate | dateFromDatetime }}</td>
+            <td attr.data-label="{{ 'AUDITING_EVENTS.TABLE.HEADER.USERNAME' | translate }}">{{ data?.content?.username }}</td>
+            <td attr.data-label="{{ 'AUDITING_EVENTS.TABLE.HEADER.GROUPS' | translate }}">{{ data?.content?.userGroups }}</td>
+          </tr>
+
+          </tbody>
+
+        </nz-table>
+
+      </div>
+    </div>
+  </ep-accordion>
+
+</ep-accordion-group>
+

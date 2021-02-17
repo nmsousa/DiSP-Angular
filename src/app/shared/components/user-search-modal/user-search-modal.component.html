@@ -1,0 +1,179 @@
+<!-- Signatories modal -->
+<ep-modal
+  id="signatories-modal"
+  epWrapClassName="vertical-center-modal"
+  [epVisible]="isVisible"
+  [epTitle]="modalTitle"
+  [epContent]="modalContent"
+  [epFooter]="modalFooter"
+  (epOnCancel)="onCancel()">
+  <ng-template #modalTitle>
+    {{ title | translate }}
+  </ng-template>
+
+  <ng-template #modalContent>
+
+    <!-- Search Form -->
+
+    <form nz-form [nzLayout]="'vertical'" [formGroup]="searchForm">
+
+      <!-- Row 1 -->
+      <div class="row">
+
+        <!-- PERS. ID -->
+        <div class="col-sm-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label>{{ 'USER_SEARCH.MODAL.CRITERIA.EPID' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input ep-input type="text" formControlName="epId"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- USERNAME -->
+        <div class="col-sm-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label>{{ 'USER_SEARCH.MODAL.CRITERIA.USERNAME' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input ep-input type="text" formControlName="username"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+      </div>
+
+      <!-- Row 2 -->
+      <div class="row">
+
+        <!-- FIRSTNAME -->
+        <div class="col-sm-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label>{{ 'USER_SEARCH.MODAL.CRITERIA.FIRSTNAME' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input ep-input type="text" formControlName="firstname"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- LASTNAME -->
+        <div class="col-sm-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label>{{ 'USER_SEARCH.MODAL.CRITERIA.LASTNAME' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input ep-input type="text" formControlName="lastname"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+      </div>
+
+      <!-- Row 3 -->
+      <div class="row">
+
+        <!-- EMAIL -->
+        <div class="col-sm-12 col-md-6">
+          <nz-form-item>
+            <nz-form-label>{{ 'USER_SEARCH.MODAL.CRITERIA.EMAIL' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input ep-input type="text" formControlName="email"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+      </div>
+
+      <span class="mb-3 float-right">
+        <!-- Clear Search Button -->
+        <button
+          ep-button
+          ep-theme="ant"
+          class="clear-button mr-2"
+          type="button"
+          (click)="onClearSearch()">
+          {{ 'USER_SEARCH.MODAL.CRITERIA.BTN_CLEAR' | translate }}
+        </button>
+
+        <!-- Search button -->
+        <button
+          ep-button
+          ep-theme="ant"
+          ep-colored="primary"
+          type="submit"
+          (click)="onSearch()">
+          {{ 'USER_SEARCH.MODAL.CRITERIA.BTN_SEARCH' | translate }}
+        </button>
+      </span>
+
+    </form>
+
+    <!-- Results table -->
+
+    <nz-table
+      class="users-table"
+      #usersTable
+      [nzData]="users"
+      [nzFrontPagination]="false"
+      [nzLoading]="isLoading"
+      [nzTotal]="totalRecords"
+      [(nzPageIndex)]="pageIndex"
+      [nzPageSize]="pageSize"
+      (nzPageIndexChange)="pageIndexChange($event)"
+      (nzPageSizeChange)="pageSizeChange($event)">
+
+      <thead>
+        <tr>
+          <!-- Select Items checkbox -->
+          <th
+            nzShowCheckbox
+            [(nzChecked)]="hasAllRecordsChecked"
+            [nzIndeterminate]="hasSomeRecordsChecked"
+            (nzCheckedChange)="checkAll($event)">
+          </th>
+
+          <th>{{ 'USER_SEARCH.MODAL.TABLE.HEADER.EPID' | translate }}</th>
+          <th>{{ 'USER_SEARCH.MODAL.TABLE.HEADER.NAME' | translate }}</th>
+          <th>{{ 'USER_SEARCH.MODAL.TABLE.HEADER.USERNAME' | translate }}</th>
+          <th>{{ 'USER_SEARCH.MODAL.TABLE.HEADER.EMAIL' | translate }}</th>
+          <th>{{ 'USER_SEARCH.MODAL.TABLE.HEADER.USER_TYPE' | translate }}</th>
+
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let data of usersTable.data">
+
+          <!-- Select checkbox -->
+          <td
+            nzShowCheckbox
+            [(nzChecked)]="mapOfCheckedId[data?.content?.epId]"
+            (nzCheckedChange)="refreshSelectionStatus()">
+          </td>
+
+          <td attr.data-label="{{ 'USER_SEARCH.MODAL.TABLE.HEADER.EPID' | translate }}">{{ data?.content?.epId }}</td>
+          <td attr.data-label="{{ 'USER_SEARCH.MODAL.TABLE.HEADER.NAME' | translate }}">{{ data?.content?.fullName }}</td>
+          <td attr.data-label="{{ 'USER_SEARCH.MODAL.TABLE.HEADER.USERNAME' | translate }}">{{ data?.content?.username }}</td>
+          <td attr.data-label="{{ 'USER_SEARCH.MODAL.TABLE.HEADER.EMAIL' | translate }}">{{ data?.content?.email }}</td>
+          <td attr.data-label="{{ 'USER_SEARCH.MODAL.TABLE.HEADER.USER_TYPE' | translate }}">{{ data?.content?.userType }}</td>
+
+        </tr>
+
+      </tbody>
+
+    </nz-table>
+
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <button ep-button ep-theme="ant" ep-colored="" (click)="onCancel()">
+      {{ 'USER_SEARCH.MODAL.BTN_CANCEL' | translate }}
+    </button>
+    <button
+      ep-button
+      ep-theme="ant"
+      ep-colored="primary"
+      (click)="onConfirm()"
+      [disabled]="!hasSomeRecordsChecked && !hasAllRecordsChecked">
+      {{ 'USER_SEARCH.MODAL.BTN_CONFIRM' | translate }}
+    </button>
+  </ng-template>
+</ep-modal>

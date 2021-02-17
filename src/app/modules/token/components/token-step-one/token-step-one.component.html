@@ -1,0 +1,61 @@
+<div id="header">
+  <div>
+    <img class="ep-logo-img" src="assets/ep-logo-token.png" alt="EP Logo">
+  </div>
+  <div>
+    <h1>
+      {{ 'TOKEN.HEADER' | translate }}
+    </h1>
+    <h2 class="token-title"
+      *ngIf="(user | async)"
+      [translate]="'TOKEN.SUB_HEADER'"
+      [translateParams]="{fullname: (user | async)?.content?.fullName, username: (user | async)?.content?.username}">
+    </h2>
+
+  </div>
+</div>
+
+<div id="tokenForm">
+
+  <div class="row mb-4">
+
+    <!-- Physical Token -->
+    <div class="physical-token">
+      <img class="img-physical-token" src="assets/RSA.png" alt="Physical Token">
+      <p class="p-physical-token">
+        {{ 'TOKEN.PHYSICAL_TOKEN' | translate }}
+      </p>
+    </div>
+
+    <!-- Separator -->
+    <div class="separator"></div>
+
+    <!-- SMS Token -->
+    <div class="EP-SMS-token">
+      <img class="img-EP-sms-token" src="assets/smsToken.png" alt="SMS Token">
+      <p class="p-sms-token">
+        {{ 'TOKEN.SMS_TOKEN' | translate }}
+      </p>
+    </div>
+  </div>
+
+  <div id="pin_and_token">
+
+    <input #pin id="token" name="token" type="password" size="60" maxlength="20"
+      (keyup.enter)="onProceed(pin.value)" [appAutoFocus]="true">
+
+    <div id="buttons-container">
+      <!-- Proceed -->
+      <button type="button" ep-button ep-colored="primary" ep-theme="ant" ep-size="lg" class="mr-2" (click)="onProceed(pin.value)">
+        {{ 'TOKEN.BTN_PROCEED' | translate | uppercase }}
+      </button>
+
+      <!-- Back -->
+      <button type="button" ep-button ep-colored="default" ep-theme="ant" ep-size="lg" (click)="onBack()">
+        {{ 'GENERIC.BTN_BACK' | translate | uppercase }}
+      </button>
+    </div>
+
+  </div>
+
+</div>

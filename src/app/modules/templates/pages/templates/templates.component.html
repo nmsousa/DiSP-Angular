@@ -1,0 +1,90 @@
+<!-- Header -->
+<div class="row">
+  <div class="col">
+    <h2>{{ 'TEMPLATES.HEADER' | translate }}</h2>
+  </div>
+  <!-- New Template -->
+  <div class="col">
+    <button
+      ep-button
+      ep-colored="primary"
+      ep-theme="ant"
+      class="float-right"
+      [routerLink]="'/templates/new'">
+      {{ 'TEMPLATES.BTN_NEW' | translate | uppercase }}
+    </button>
+  </div>
+</div>
+
+<hr />
+
+<!-- Table -->
+<div class="row">
+  <div class="col">
+
+    <!-- Templates table -->
+
+    <nz-table
+      #templatesTable
+      [nzData]="templates"
+      nzShowSizeChanger
+      [nzPageSizeOptions]="[5, 10, 25]"
+      [nzFrontPagination]="false"
+      [nzLoading]="isLoading"
+      [nzTotal]="totalRecords"
+      [(nzPageIndex)]="pageIndex"
+      [nzPageSize]="pageSize"
+      (nzPageIndexChange)="pageIndexChange($event)"
+      (nzPageSizeChange)="pageSizeChange($event)">
+
+      <thead (nzSortChange)="sort($event)" nzSingleSort>
+        <tr>
+
+          <th nzShowSort nzSortKey="title">{{ 'TEMPLATES.TABLE.HEADER.TITLE' | translate }}</th>
+          <th nzShowSort nzSortKey="date_created">{{ 'TEMPLATES.TABLE.HEADER.CREATION_DATE' | translate }}</th>
+          <th nzShowSort nzSortKey="ta.template.status">{{ 'TEMPLATES.TABLE.HEADER.STATUS' | translate }}</th>
+          <th>{{ 'TEMPLATES.TABLE.HEADER.ACTIONS' | translate }}</th>
+
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let data of templatesTable.data">
+
+          <!-- Title -->
+          <td attr.data-label="{{ 'TEMPLATES.TABLE.HEADER.TITLE' | translate }}">
+            {{ data?.content?.title }}</td>
+          <!-- Creation Date -->
+          <td nz-tooltip nzTitle="{{ data?.content?.creationDate }}" attr.data-label="{{ 'TEMPLATES.TABLE.HEADER.CREATION_DATE' | translate }}">
+            {{ data?.content?.creationDate | dateFromDatetime }}</td>
+          <!-- Status -->
+          <td nz-tooltip nzTitle="{{ (data?.content?.status ?
+            'TEMPLATES.TABLE.STATUS.ENABLED.TOOLTIP' : 'TEMPLATES.TABLE.STATUS.DISABLED.TOOLTIP') | translate }}"
+            attr.data-label="{{ 'TEMPLATES.TABLE.HEADER.STATUS' | translate }}">
+            <input type="checkbox" *epSwitch="{ type:'rounded', size: 'md' }"
+              attr.aria-label="{{ (data?.content?.status ?
+                'TEMPLATES.TABLE.STATUS.ENABLED.TOOLTIP' : 'TEMPLATES.TABLE.STATUS.DISABLED.TOOLTIP') | translate }}"
+              [ngModel]="data?.content?.status"
+              (change)="onChangeTemplateStatus($event, data?.content)"/></td>
+          <!-- Actions -->
+          <td attr.data-label="{{ 'TEMPLATES.TABLE.HEADER.ACTIONS' | translate }}" class="text-center">
+            <button ep-button [routerLink]="[data?.content?.id]" class="mr-2"
+              attr.aria-label="{{ 'TEMPLATES.TABLE.ACTIONS.VIEW.TOOLTIP' | translate }}"
+              nz-tooltip nzTitle="{{ 'TEMPLATES.TABLE.ACTIONS.VIEW.TOOLTIP' | translate }}">
+              <i nz-icon nzType="search" nzTheme="outline"></i>
+            </button>
+            <button ep-button [routerLink]="[data?.content?.id, 'edit']" [queryParams]="{pageSize: pageSize}"
+              attr.aria-label="{{ 'TEMPLATES.TABLE.ACTIONS.EDIT.TOOLTIP' | translate }}"
+              nz-tooltip nzTitle="{{ 'TEMPLATES.TABLE.ACTIONS.EDIT.TOOLTIP' | translate }}">
+              <i nz-icon nzType="edit" nzTheme="outline"></i>
+            </button>
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </nz-table>
+
+  </div>
+</div>

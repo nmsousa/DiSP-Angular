@@ -1,0 +1,88 @@
+<nz-form-item class="mb-0">
+
+  <nz-form-label [nzRequired]="isRequired" *ngIf="formLabel">{{ formLabel | translate }}</nz-form-label>
+
+  <nz-form-control>
+
+    <nz-list cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!isSortable"
+      nzBordered nzSize="small" [nzItemLayout]="'horizontal'" nzNoResult=" ">
+      <nz-list-item *ngFor="let item of persons" cdkDrag [nzActions]="[removeAction]"
+        (click)="onSelectedPerson(item)" [class.selected]="item === selectedPerson">
+
+        <!-- Remove item -->
+        <ng-template #removeAction>
+          <a *ngIf="!isReadonly" (click)="removePerson(item)" class="text-danger remove-person-icon" nz-tooltip
+            [nzMouseEnterDelay]="0.5"
+            nzTitle="{{ 'PERSONS_EDITABLE_LIST.CRITERIA.PERSONS.REMOVE.TOOLTIP' | translate }}">x</a>
+        </ng-template>
+
+        <!-- Label -->
+        <nz-list-item-meta [nzTitle]="item?.label"
+          epTooltip="{{ item?.label + ' (' + ('USERS.AUTOCOMPLETE.ID_TRANSLATION' | translate) + ': ' + item?.epId + ')' }}" epPlacement="bottom">
+        </nz-list-item-meta>
+
+        <!-- Role Actions -->
+        <span class="role-tags-container" *ngIf="roles && roles.length > 0">
+          <nz-tag *ngFor="let roleItem of item?.roles"
+            [ngStyle]="{'cursor': isReadonly ? 'auto' : 'pointer' }"
+            [nzMode]="!isReadonly ? 'checkable' : 'default'"
+            [(nzChecked)]="roleItem.active"
+            nz-tooltip nzTitle="{{ 'SECURITY_ROLES.' + roleItem.role + '.TOOLTIP' | translate }}"
+            [nzMouseEnterDelay]="1">
+            {{ 'SECURITY_ROLES.' + roleItem.role | translate  | uppercase }}
+          </nz-tag>
+        </span>
+
+        <!-- Deadline (used by Request Signatories) -->
+        <span *ngIf="hasDeadline" >
+          <nz-date-picker [(ngModel)]="item.deadline" [nzDisabledDate]="disablePastDates" [nzFormat]="'dd/MM/yyyy'">
+          </nz-date-picker>
+        </span>
+
+      </nz-list-item>
+
+    </nz-list>
+
+  </nz-form-control>
+
+</nz-form-item>
+
+<!-- List Buttons -->
+<span *ngIf="!isReadonly" class="mb-3 list-buttons-container">
+
+  <!-- Move up -->
+  <button ep-button class="mr-2" type="button" (click)="moveSelectedPersonUp()"
+    aria-label="Move Person Up" [disabled]="!selectedPerson" *ngIf="isSortable">
+    <i nz-icon nzType="arrow-up" nzTheme="outline" class="reorder-arrow"></i>
+  </button>
+
+  <!-- Move down -->
+  <button ep-button class="mr-2" type="button" (click)="moveSelectedPersonDown()"
+    aria-label="Move Person Down" [disabled]="!selectedPerson" *ngIf="isSortable">
+    <i nz-icon nzType="arrow-down" nzTheme="outline" class="reorder-arrow"></i>
+  </button>
+
+
+  <!-- Clear Persons list -->
+  <button ep-button ep-theme="ant" class="clear-button mr-2" type="button" (click)="clearAllPersons()">
+    <span>{{ 'PERSONS_EDITABLE_LIST.CRITERIA.PERSONS.CLEAR' | translate }}</span>
+  </button>
+
+  <!-- Open Persons modal -->
+  <button ep-button ep-theme="ant" class="show-persons-btn" type="button"
+    (click)="showPersonsModal()">
+    <span>{{ 'PERSONS_EDITABLE_LIST.CRITERIA.PERSONS.MODAL.SHOW' | translate }}</span>
+  </button>
+
+  <!-- Persons modal -->
+  <app-user-search-modal [title]="'PERSONS_EDITABLE_LIST.CRITERIA.PERSONS.MODAL.TITLE'"
+    [isVisible]="isPersonsModalVisible"
+    (confirm)="handlePersonsModalOk($event)" (close)="handlePersonsModalCancel()">
+  </app-user-search-modal>
+
+</span>
+
+<!-- Autocomplete to search for users -->
+
+<app-users-autocomplete *ngIf="!isReadonly" (selectionChange)="addToPersons($event)" [clearAfterSelection]="true">
+</app-users-autocomplete>

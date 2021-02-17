@@ -1,0 +1,5 @@
+export enum RadiusAuthentificationStatus {
+  ACCESS_ACCEPT = 'ACCESS_ACCEPT',
+  ACCESS_CHALLENGE = 'ACCESS_CHALLENGE',
+  ACCESS_REJECT = 'ACCESS_REJECT'
+}

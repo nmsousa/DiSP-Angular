@@ -1,0 +1,274 @@
+<div class="row">
+  <div class="col">
+    <h2>{{ 'USER_PREFERENCES.HEADER' | translate }}</h2>
+  </div>
+</div>
+
+<hr />
+
+<!-- General -->
+<div class="row mb-3">
+  <div class="col">
+    <ep-accordion epTitle="{{ 'USER_PREFERENCES.GENERAL.HEADER' | translate }}">
+      <form nz-form [nzLayout]="'vertical'">
+        <!-- Default Language -->
+        <nz-form-item>
+          <nz-form-label>{{ 'USER_PREFERENCES.GENERAL.DEFAULT_LANGUAGE' | translate }}</nz-form-label>
+          <nz-form-control>
+            <ep-toggle *ngIf="userPreferences"  [theme]="''" buttonStyle="solid" [options]="languageOptions" [initValue]="userPreferences.guiLanguage"
+              (onChange)="onDefaultLanguageChange($event)">
+            </ep-toggle>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Number of records per page -->
+        <nz-form-item>
+          <nz-form-label>{{ 'USER_PREFERENCES.GENERAL.RECORDS_PER_PAGE' | translate }}</nz-form-label>
+          <nz-form-control>
+            <ep-toggle *ngIf="userPreferences"  [theme]="''" buttonStyle="solid" [options]="recordPerPageOptions" [initValue]="userPreferences.recordsPerPage"
+              (onChange)="onRecordsPerPageChange($event)">
+            </ep-toggle>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ep-accordion>
+  </div>
+</div>
+
+<!-- E-mail notifications / Legend -->
+<div class="row mb-3">
+  <div class="col">
+    <ep-accordion epTitle="{{ 'USER_PREFERENCES.LEGEND.HEADER' | translate }}">
+      <div class="row legend-row">
+        <div class="col-12">
+          <p class="text-muted">
+            <span
+              class="label text-white text-center bg-info">{{ 'USER_PREFERENCES.LEGEND.INFO.LABEL' | translate }}</span>
+            {{ 'USER_PREFERENCES.LEGEND.INFO.DESCRIPTION' | translate }}
+          </p>
+          <p class="text-muted">
+            <span
+              class="label text-white text-center bg-success">{{ 'USER_PREFERENCES.LEGEND.SUCCESS.LABEL' | translate }}</span>
+            {{ 'USER_PREFERENCES.LEGEND.SUCCESS.DESCRIPTION' | translate }}
+          </p>
+          <p class="text-muted">
+            <span
+              class="label text-white text-center bg-warning">{{ 'USER_PREFERENCES.LEGEND.WARNING.LABEL' | translate }}</span>
+            {{ 'USER_PREFERENCES.LEGEND.WARNING.DESCRIPTION' | translate }}
+          </p>
+          <p class="text-muted">
+            <span
+              class="label text-white text-center bg-danger">{{ 'USER_PREFERENCES.LEGEND.ERROR.LABEL' | translate }}</span>
+            {{ 'USER_PREFERENCES.LEGEND.ERROR.DESCRIPTION' | translate }}
+          </p>
+        </div>
+      </div>
+    </ep-accordion>
+  </div>
+</div>
+
+
+<!-- Table -->
+<div class="row mb-3">
+  <div class="col" *ngIf="userPreferences">
+
+    <ep-accordion class="user-preferences-container"
+      epTitle="{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.HEADER' | translate }}">
+
+      <!-- Title row -->
+      <div class="row mb-2">
+        <!-- Notification types -->
+        <div class="col-3">
+          <b>{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.NOTIFICATION_TYPES.HEADER' | translate }}</b>
+        </div>
+        <!-- High Priority -->
+        <div class="col-2">
+          <b>{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.HIGH_PRIORITY.HEADER' | translate }}</b>
+        </div>
+        <!-- Creator (co-requestor) -->
+        <div class="col-2">
+          <b>{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.CREATOR.HEADER' | translate }}</b>
+        </div>
+        <!-- Signatory -->
+        <div class="col-2">
+          <b>{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.SIGNATORY.HEADER' | translate }}</b>
+        </div>
+        <div class="col-3"></div>
+      </div>
+
+
+      <!-- Row 1 (Creation) -->
+
+      <app-my-preferences-notification-type-row>
+        <div notificationType>{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.NOTIFICATION_TYPES.CREATION' | translate }}
+        </div>
+
+        <nz-tag requestor class="bg-success" [nzMode]="'checkable'" (nzCheckedChange)="onTagChanged()"
+          [(nzChecked)]="userPreferences.emailRequestorCreated">
+        </nz-tag>
+      </app-my-preferences-notification-type-row>
+
+
+      <!-- Row 2 (Invitation to sign) -->
+
+      <app-my-preferences-notification-type-row>
+        <div notificationType>
+          {{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.NOTIFICATION_TYPES.INVITATION_TO_SIGN' | translate }}</div>
+
+        <!-- Mobile -->
+
+        <input priorityMobile
+          attr.aria-label="{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.HIGH_PRIORITY.HEADER' | translate }}"
+          nz-input type="checkbox" *epSwitch="{ switchOnText: 'On', switchOffText: 'Off', size: 'sm' }"
+          [ngModel]="userPreferences.emailInbox === 2" (change)="onChangePriority('emailInbox')"
+          [disabled]="userPreferences.emailInbox === 0" />
+
+        <!-- Desktop -->
+
+        <input priority
+          attr.aria-label="{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.HIGH_PRIORITY.HEADER' | translate }}"
+          nz-input type="checkbox" *epSwitch="{ switchOnText: 'On', switchOffText: 'Off' }"
+          [ngModel]="userPreferences.emailInbox === 2" (change)="onChangePriority('emailInbox')"
+          [disabled]="userPreferences.emailInbox === 0" />
+
+
+        <!-- 0 for none, 1 for yes, 2 for receive with priority flag -->
+        <nz-tag signatory class="bg-warning" [nzMode]="'checkable'" [nzChecked]="userPreferences.emailInbox > 0"
+          (nzCheckedChange)="onChangeTriStateOption($event, 'emailInbox')">
+        </nz-tag>
+      </app-my-preferences-notification-type-row>
+
+
+      <!-- Row 3 (Sent update) -->
+
+      <app-my-preferences-notification-type-row>
+        <div notificationType>{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.NOTIFICATION_TYPES.SENT_UPDATE' | translate }}
+        </div>
+
+        <nz-tag requestor class="bg-success" [nzMode]="'checkable'" (nzCheckedChange)="onTagChanged()"
+          [(nzChecked)]="userPreferences.emailRequestorUpdated">
+        </nz-tag>
+
+        <nz-tag signatory class="bg-info" [nzMode]="'checkable'"  (nzCheckedChange)="onTagChanged()"
+          [(nzChecked)]="userPreferences.emailSignatoryUpdated">
+        </nz-tag>
+      </app-my-preferences-notification-type-row>
+
+
+      <!-- Row 4 (Signed / Proof of signature) -->
+
+      <app-my-preferences-notification-type-row>
+        <div notificationType>{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.NOTIFICATION_TYPES.SIGNED' | translate }}</div>
+
+        <nz-tag signatory class="bg-success" [nzMode]="'checkable'" (nzCheckedChange)="onTagChanged()"
+          [(nzChecked)]="userPreferences.emailSignatorySigned">
+        </nz-tag>
+      </app-my-preferences-notification-type-row>
+
+
+      <!-- Row 5 (Canceled) -->
+
+      <app-my-preferences-notification-type-row>
+        <div notificationType>{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.NOTIFICATION_TYPES.CANCELED' | translate }}
+        </div>
+
+        <nz-tag requestor class="bg-success" [nzMode]="'checkable'" (nzCheckedChange)="onTagChanged()"
+          [(nzChecked)]="userPreferences.emailRequestorCancelled">
+        </nz-tag>
+
+        <nz-tag signatory class="bg-info" [nzMode]="'checkable'" (nzCheckedChange)="onTagChanged()"
+          [(nzChecked)]="userPreferences.emailSignatoryCancelled">
+        </nz-tag>
+      </app-my-preferences-notification-type-row>
+
+
+      <!-- Row 6 (Signature rejected) -->
+
+      <app-my-preferences-notification-type-row>
+        <div notificationType>
+          {{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.NOTIFICATION_TYPES.SIGNATURE_REJECTED' | translate }}</div>
+
+        <nz-tag requestor class="bg-info" [nzMode]="'checkable'" (nzCheckedChange)="onTagChanged()"
+          [(nzChecked)]="userPreferences.emailRequestorRejected">
+        </nz-tag>
+
+        <nz-tag signatory class="bg-info" [nzMode]="'checkable'" (nzCheckedChange)="onTagChanged()"
+          [(nzChecked)]="userPreferences.emailSignatoryRejected">
+        </nz-tag>
+      </app-my-preferences-notification-type-row>
+
+
+      <!-- Row 7 (Refuse to sign) -->
+
+      <app-my-preferences-notification-type-row>
+        <div notificationType>
+          {{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.NOTIFICATION_TYPES.REFUSE_TO_SIGN' | translate }}</div>
+
+        <nz-tag requestor class="bg-info" [nzMode]="'checkable'" (nzCheckedChange)="onTagChanged()"
+          [(nzChecked)]="userPreferences.emailRequestorRefused">
+        </nz-tag>
+      </app-my-preferences-notification-type-row>
+
+
+      <!-- Row 8 (Completed) -->
+
+      <app-my-preferences-notification-type-row>
+        <div notificationType>{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.NOTIFICATION_TYPES.COMPLETED' | translate }}
+        </div>
+
+        <nz-tag requestor class="bg-success" [nzMode]="'checkable'" (nzCheckedChange)="onTagChanged()"
+          [(nzChecked)]="userPreferences.emailRequestorCompleted">
+        </nz-tag>
+      </app-my-preferences-notification-type-row>
+
+
+      <!-- Row 9 (Reminder) -->
+
+      <app-my-preferences-notification-type-row>
+        <div notificationType>{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.NOTIFICATION_TYPES.REMINDER' | translate }}
+        </div>
+
+        <!-- Mobile -->
+
+        <input priorityMobile
+          attr.aria-label="{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.HIGH_PRIORITY.HEADER' | translate }}"
+          nz-input type="checkbox" *epSwitch="{ switchOnText: 'On', switchOffText: 'Off', size: 'sm' }"
+          [ngModel]="userPreferences.emailNotificationsDeadline === 2"
+          (change)="onChangePriority('emailNotificationsDeadline')"
+          [disabled]="userPreferences.emailNotificationsDeadline === 0" />
+
+        <!-- Desktop -->
+
+        <input priority
+          attr.aria-label="{{ 'USER_PREFERENCES.REQUEST_NOTIFICATION.HIGH_PRIORITY.HEADER' | translate }}"
+          nz-input type="checkbox" *epSwitch="{ switchOnText: 'On', switchOffText: 'Off', size: 'md' }"
+          [ngModel]="userPreferences.emailNotificationsDeadline === 2"
+          (change)="onChangePriority('emailNotificationsDeadline')"
+          [disabled]="userPreferences.emailNotificationsDeadline === 0" />
+
+        <!-- 0 for none, 1 for yes, 2 for receive with priority flag -->
+        <nz-tag signatory class="bg-warning" [nzMode]="'checkable'"
+          [nzChecked]="userPreferences.emailNotificationsDeadline > 0"
+          (nzCheckedChange)="onChangeTriStateOption($event, 'emailNotificationsDeadline')">
+        </nz-tag>
+      </app-my-preferences-notification-type-row>
+
+    </ep-accordion>
+
+  </div>
+</div>
+
+<div class="floating-btns-container">
+  <!-- Save button -->
+  <button ep-button ep-theme="ant" ep-colored="primary" type="button"
+    class="save-btn" (click)="onSave()">
+    <i nz-icon nzType="save" nzTheme="outline" class="mr-2"></i>
+    {{ 'USER_PREFERENCES.BTN_SAVE' | translate | uppercase }}
+  </button>
+
+  <!-- Cancel button -->
+  <button ep-button ep-theme="ant" type="button"
+    *ngIf="hasChanges" class="cancel-btn ml-3" (click)="onCancel()">
+    {{ 'EDIT_TEMPLATE.BTN_CANCEL' | translate | uppercase }}
+  </button>
+</div>

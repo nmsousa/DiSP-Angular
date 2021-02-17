@@ -1,0 +1,236 @@
+<!-- Header -->
+<div class="row">
+  <div class="col">
+    <h2>{{ 'SEARCH_REQUESTS.HEADER' | translate }}</h2>
+  </div>
+</div>
+
+<hr />
+
+<ep-accordion-group>
+
+  <ep-accordion #searchCriteriaAccordion id="search-requests"
+    epTitle="{{ 'SEARCH_REQUESTS.SEARCH_CRITERIA.HEADER' | translate }}">
+
+    <form nz-form [nzLayout]="'vertical'" [formGroup]="searchForm">
+
+      <!-- Row 1 -->
+      <div class="row">
+
+        <!-- Left Side -->
+        <div class="col-12 col-lg-6 pl-0 pr-0">
+
+          <nz-divider nzText="{{ 'SEARCH_REQUESTS.CRITERIA.MAIN' | translate }}" nzOrientation="left" class="text-info">
+          </nz-divider>
+
+          <!-- ID -->
+          <div class="col-12">
+            <nz-form-item>
+              <nz-form-label nzFor="id">{{ 'SEARCH_REQUESTS.CRITERIA.ID' | translate }}</nz-form-label>
+              <nz-form-control>
+                <input id="id" ep-input type="text" formControlName="id" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Title -->
+          <div class="col-12">
+            <nz-form-item>
+              <nz-form-label nzFor="title">{{ 'SEARCH_REQUESTS.CRITERIA.TITLE' | translate }}</nz-form-label>
+              <nz-form-control>
+                <input id="title" ep-input type="text" formControlName="document.title" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <nz-divider nzText="{{ 'SEARCH_REQUESTS.CRITERIA.SIGNATORIES' | translate }}" nzOrientation="left"
+            class="text-info"></nz-divider>
+
+          <!-- Signatories -->
+          <div class="col-12">
+            <app-persons-editable-list [persons]="signatories" (personsChanged)="signatories = $event">
+            </app-persons-editable-list>
+          </div>
+
+        </div>
+
+
+        <!-- Right Side -->
+        <div class="col-12 col-lg-6">
+
+          <!-- Deadline -->
+
+          <div class="row">
+
+            <nz-divider nzText="{{ 'SEARCH_REQUESTS.CRITERIA.DEADLINE' | translate }}" nzOrientation="left"
+              class="text-info"></nz-divider>
+
+            <!-- From -->
+            <div class="col-12 col-xl-6">
+              <nz-form-item>
+                <nz-form-label>{{ 'SEARCH_REQUESTS.CRITERIA.DEADLINE.FROM' | translate }}</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker formControlName="deadline_From" [nzFormat]="'dd/MM/yyyy'">
+                  </nz-date-picker>
+                  <span *ngIf="searchForm.hasError('deadlineRangeError')" class="text-danger">
+                    {{ 'SEARCH_REQUESTS.CRITERIA.ERROR.LOWER_DATE' | translate }}</span>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- To -->
+            <div class="col-12 col-xl-6">
+              <nz-form-item>
+                <nz-form-label>{{ 'SEARCH_REQUESTS.CRITERIA.DEADLINE.TO' | translate }}</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker formControlName="deadline_To" [nzFormat]="'dd/MM/yyyy'">
+                  </nz-date-picker>
+                  <span *ngIf="searchForm.hasError('deadlineRangeError')" class="text-danger">
+                    {{ 'SEARCH_REQUESTS.CRITERIA.ERROR.GREATER_DATE' | translate }}</span>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+
+          <!-- Creation Date -->
+          <div class="row">
+            <nz-divider nzText="{{ 'SEARCH_REQUESTS.CRITERIA.CREATION_DATE' | translate }}" nzOrientation="left"
+              class="text-info"></nz-divider>
+
+            <!-- From -->
+            <div class="col-12 col-xl-6">
+              <nz-form-item>
+                <nz-form-label>{{ 'SEARCH_REQUESTS.CRITERIA.CREATION_DATE.FROM' | translate }}</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker formControlName="dateCreated_From" [nzDisabledDate]="disableFutureDates"
+                    [nzFormat]="'dd/MM/yyyy'">
+                  </nz-date-picker>
+                  <span *ngIf="searchForm.hasError('dateCreatedRangeError')" class="text-danger">
+                    {{ 'SEARCH_REQUESTS.CRITERIA.ERROR.LOWER_DATE' | translate }}
+                  </span>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- To -->
+            <div class="col-12 col-xl-6">
+              <nz-form-item>
+                <nz-form-label>{{ 'SEARCH_REQUESTS.CRITERIA.CREATION_DATE.TO' | translate }}</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker formControlName="dateCreated_To" [nzDisabledDate]="disableFutureDates"
+                    [nzFormat]="'dd/MM/yyyy'">
+                  </nz-date-picker>
+                  <span *ngIf="searchForm.hasError('dateCreatedRangeError')" class="text-danger">
+                    {{ 'SEARCH_REQUESTS.CRITERIA.ERROR.GREATER_DATE' | translate }}
+                  </span>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <!-- Statuses -->
+          <div class="row">
+            <nz-divider nzText="{{ 'SEARCH_REQUESTS.CRITERIA.STATUS' | translate }}" nzOrientation="left"
+              class="text-info"></nz-divider>
+
+            <!-- Request Status -->
+            <div class="col-12 col-xl-6">
+              <nz-form-item>
+                <nz-form-label nzFor="requestStatus">{{ 'SEARCH_REQUESTS.CRITERIA.REQUEST_STATUS' | translate }}</nz-form-label>
+                <nz-form-control>
+                  <ep-select id="requestStatus" name="requestStatus" formControlName="status" epMode="tags"
+                    epPlaceHolder="{{ 'SEARCH_REQUESTS.CRITERIA.REQUEST_STATUS.PLACEHOLDER' | translate }}">
+                    <ep-option *ngFor="let reqStatus of RequestStatuses | keyvalue"
+                      epLabel="{{ reqStatus.key | titlecase }}" [epValue]="reqStatus.value">
+                    </ep-option>
+                  </ep-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Assignment Status -->
+            <div class="col-12 col-xl-6">
+              <nz-form-item>
+                <nz-form-label>{{ 'SEARCH_REQUESTS.CRITERIA.ASSIGNMENT_STATUS' | translate }}</nz-form-label>
+                <nz-form-control>
+                  <ep-select aria-label="cenas" formControlName="assignments.status" epMode="tags"
+                    epPlaceHolder="{{ 'SEARCH_REQUESTS.CRITERIA.ASSIGNMENT_STATUS.PLACEHOLDER' | translate }}">
+                    <ep-option *ngFor="let assignmentStatus of AssignmentStatuses | keyvalue"
+                      epLabel="{{ assignmentStatus.key | titlecase }}" [epValue]="assignmentStatus.value">
+                    </ep-option>
+                  </ep-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <!-- Archived/Purged -->
+          <div class="row">
+            <nz-divider nzText="{{ 'SEARCH_REQUESTS.CRITERIA.OPTIONS' | translate }}" nzOrientation="left"
+              class="text-info"></nz-divider>
+
+            <!-- Archived -->
+            <div class="col-12 col-xl-6">
+              <nz-form-item>
+                <nz-form-label>{{ 'SEARCH_REQUESTS.CRITERIA.ARCHIVED' | translate }}</nz-form-label>
+                <nz-form-control>
+                  <ep-toggle [theme]="''" buttonStyle="solid" [options]="archivedOptions"
+                    (onChange)="onArchivedChange($event)" [initValue]="null">
+                  </ep-toggle>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Purged -->
+            <div class="col-12 col-xl-6">
+              <nz-form-item>
+                <nz-form-label>{{ 'SEARCH_REQUESTS.CRITERIA.PURGED' | translate }}</nz-form-label>
+                <nz-form-control>
+                  <ep-toggle [theme]="''" buttonStyle="solid" [options]="purgedOptions"
+                    (onChange)="onPurgedChange($event)" [initValue]="null">
+                  </ep-toggle>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <span class="mb-3 list-buttons-container">
+        <!-- Clear Search Button -->
+        <button ep-button ep-theme="ant" class="clear-button mr-2" type="button" (click)="onClearSearch()">
+          {{ 'SEARCH_REQUESTS.CRITERIA.BTN_CLEAR' | translate }}
+        </button>
+
+        <!-- Search button -->
+        <button ep-button ep-theme="ant" ep-colored="primary" type="submit" [disabled]="!searchForm.valid"
+          (click)="onSearch()">
+          {{ 'SEARCH_REQUESTS.CRITERIA.BTN_SEARCH' | translate }}
+        </button>
+      </span>
+
+    </form>
+
+  </ep-accordion>
+
+  <!-- Table -->
+  <ep-accordion #resultsAccordion epTitle="{{ 'SEARCH_REQUESTS.RESULTS.HEADER' | translate }}" [epCollapsed]="true">
+    <div class="row">
+      <div class="col">
+
+        <!-- Actions -->
+        <app-requests-actions-bar></app-requests-actions-bar>
+
+        <hr />
+
+        <app-requests-table [columns]="columns" [hasFiltersToolbar]="false" [customFilters]="requestFilters">
+        </app-requests-table>
+
+      </div>
+    </div>
+  </ep-accordion>
+
+</ep-accordion-group>

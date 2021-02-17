@@ -1,0 +1,8 @@
+{
+  "/disp-web-2.10.0/*": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}
+

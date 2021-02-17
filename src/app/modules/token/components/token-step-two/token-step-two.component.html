@@ -1,0 +1,66 @@
+<!-- TOKEN CHALENGED OR SMS TOKEN -->
+<div id="body">
+
+  <div id="header">
+    <div>
+      <img class="ep-logo-img" src="assets/ep-logo-token.png" alt="EP Logo">
+    </div>
+    <div>
+      <h2>
+        {{ 'TOKEN.HEADER' | translate }}
+        <p>{{ (user | async)?.content?.username + ' (' + (user | async)?.content?.fullName + ')' }}</p>
+      </h2>
+
+    </div>
+  </div>
+
+  <div id="tokenForm">
+
+    <br>
+
+    <div id="pin_and_token">
+
+      <p>
+        <b>{{ 'TOKEN.STEP_2.USERNAME' | translate }}:</b>
+      </p>
+      <p> {{ (user | async)?.content?.username + ' (' + (user | async)?.content?.fullName + ')' }}</p>
+
+      <div id="intro_text">
+        <p>
+          <b>{{ 'TOKEN.STEP_2.INTRO_TEXT' | translate }}</b>
+        </p>
+        <ul>
+          <li>
+            <p>{{ 'TOKEN.STEP_2.ENTER_CODE' | translate }}
+          </li>
+        </ul>
+        <p>
+          <b>{{ 'TOKEN.STEP_2.USE_PHYSICAL_TOKEN' | translate }}</b>
+        </p>
+        <ul>
+          <li>
+            <p innerHTML="{{'TOKEN.STEP_2.ENTER_NEW_CODE' | translate}}"></p>
+          </li>
+        </ul>
+      </div>
+
+
+      <input id="token" name="token" type="password" size="60" maxlength="20"
+        [(ngModel)]="token" (keyup.enter)="onSignIn()" [appAutoFocus]="focusInput">
+
+      <div id="buttons-container">
+        <!-- Sign-in -->
+        <button type="button" ep-button ep-colored="primary" ep-theme="ant" ep-size="lg" class="mr-2" (click)="onSignIn()">
+          {{ 'TOKEN.STEP_2.BTN_SIGN_IN' | translate | uppercase }}
+        </button>
+
+        <!-- Back -->
+        <button type="button" ep-button ep-colored="default" ep-theme="ant" ep-size="lg" (click)="onBack()">
+          {{ 'GENERIC.BTN_BACK' | translate | uppercase }}
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</div>

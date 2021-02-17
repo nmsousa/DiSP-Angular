@@ -1,0 +1,83 @@
+<div class="row">
+  <div class="col action-buttons">
+    <button
+      ep-button
+      ep-colored="primary"
+      ep-theme="ant"
+      (click)="onEditClicked()">
+      {{ 'REQUESTS_ACTION_BAR.ACTIONS.EDIT' | translate }}
+    </button>
+    <button
+      ep-button
+      ep-colored="primary"
+      ep-theme="ant"
+      (click)="onSendClicked()">
+      {{ 'REQUESTS_ACTION_BAR.ACTIONS.SEND' | translate }}
+    </button>
+    <button
+      ep-button
+      ep-colored="primary"
+      ep-theme="ant"
+      (click)="onCancelClicked()">
+      {{ 'REQUESTS_ACTION_BAR.ACTIONS.CANCEL' | translate }}
+    </button>
+    <button
+      ep-button
+      ep-colored="primary"
+      ep-theme="ant"
+      (click)="onArchiveClicked()">
+      {{ 'REQUESTS_ACTION_BAR.ACTIONS.ARCHIVE' | translate }}
+    </button>
+    <button
+      ep-button
+      ep-colored="primary"
+      ep-theme="ant"
+      (click)="onPurgeClicked()">
+      {{ 'REQUESTS_ACTION_BAR.ACTIONS.PURGE' | translate }}
+    </button>
+  </div>
+</div>
+
+<!-- Purge Modal -->
+<ep-modal
+  [(epVisible)]="isPurgeModalVisible"
+  epWrapClassName="vertical-center-modal"
+  epTitle="{{ 'REQUESTS_ACTION_BAR.PROMPT.MULTI-PURGE.CONFIRMATION2.TITLE' | translate }}"
+  epOkText="{{ 'REQUESTS_ACTION_BAR.PROMPT.MULTI-PURGE.CONFIRMATION2.ACTION' | translate }}"
+  epOkType="danger"
+  (epOnOk)="onPurgeConfirmed()"
+  (epOnCancel)="closePurgeModal()"
+  (epAfterClose)="closePurgeModal()">
+
+  <p>{{ 'REQUESTS_ACTION_BAR.PROMPT.MULTI-PURGE.CONFIRMATION2.INFORMATION1' | translate }}</p>
+  <p>{{ 'REQUESTS_ACTION_BAR.PROMPT.MULTI-PURGE.CONFIRMATION2.INFORMATION2' | translate }}</p>
+  <p>{{ 'REQUESTS_ACTION_BAR.PROMPT.MULTI-PURGE.CONFIRMATION2.INFORMATION3' | translate }}</p>
+
+  <!-- Download button -->
+  <button
+    ep-button
+    ep-colored="primary"
+    ep-theme="ant"
+    (click)="onClickDownloadPurge()">
+    {{ 'REQUESTS_ACTION_BAR.PROMPT.MULTI-PURGE.CONFIRMATION2.DOWNLOAD' | translate }}
+  </button>
+
+  <br><br>
+
+  <!-- Comment box -->
+  <form>
+    <div class="form-group">
+      <label for="comment" class="mb-1">{{ 'REQUESTS_ACTION_BAR.ACTIONS.COMMENT' | translate }}</label>
+      <textarea
+        id="comment"
+        name="comment"
+        type="text"
+        rows="4"
+        ep-input
+        epTheme="ant"
+        [(ngModel)]="purgeComment">
+      </textarea>
+    </div>
+  </form>
+
+</ep-modal>

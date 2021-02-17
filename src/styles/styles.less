@@ -1,0 +1,293 @@
+:focus {
+  outline: none;
+}
+button:focus {
+  outline: none;
+}
+
+.disp {
+  &__content {
+    min-height: 100vh;
+  }
+  &__main {
+    // height: 100%;
+    h1,
+    h2,
+    h3 {
+      color: @primary-color !important;
+      font-weight: 600 !important;
+    }
+
+    h1 {
+      font-size: 3em !important;
+    }
+    h2 {
+      font-size: 2.5em !important;
+    }
+
+    h3 {
+      font-size: 2em !important;
+    }
+
+    &__sidebar {
+      h1 {
+        color: @contrastColor !important;
+        font-size: 3em;
+      }
+    }
+  }
+}
+@media (min-width: 1600px) {
+  .container {
+    max-width: 1440px;
+  }
+}
+
+
+/* nz-table */
+
+/* responsivity */
+
+.ant-table {
+  display: block;
+
+  &-thead > tr,
+  &-tbody > tr {
+    th,
+    td {
+      word-break: normal;
+      -ms-word-break: normal;
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+    &-thead {
+      display: none;
+    }
+
+    &-thead > tr,
+    &-tbody > tr {
+      th,
+      td {
+        word-break: normal;
+        -ms-word-break: normal;
+        &:first-of-type {
+          padding-top: 1rem;
+        }
+
+        &:last-of-type {
+          padding-bottom: 1rem;
+        }
+      }
+
+      > th,
+      > td {
+        display: block;
+        width: auto !important;
+        border: none;
+        padding: 0 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.8rem;
+        display: grid;
+        &:before{
+          content: attr(data-label);
+          float: left;
+          font-size:0.8rem;
+          text-transform: uppercase;
+          font-weight: bold;
+        }
+
+        &:last-child {
+          border-bottom: 1px solid #eee;
+        }
+      }
+    }
+  }
+}
+
+/* Clear / Search Buttons  */
+
+/* Desktop */
+
+.list-buttons-container {
+  float: right;
+}
+
+/* Mobile */
+
+@media screen and (max-width: 767px) {
+  .list-buttons-container {
+    width: 100%;
+    float: left;
+  }
+  .list-buttons-container button {
+    width: 100%;
+  }
+  /* Search button */
+  .list-buttons-container button:not(:first-child) {
+    margin-left: 0;
+    margin-top: 0.5rem !important;
+  }
+}
+
+
+/* generic styles */
+
+nz-table {
+  background: #fff;
+}
+
+// To avoid breaking table column header texts of breaking into new lines
+.ant-table-thead > tr > th {
+  word-break: normal !important;
+}
+
+.ant-pagination {
+  padding-right: 1em;
+}
+
+.ant-pagination-prev,
+.ant-pagination-next {
+  line-height: 26px !important;
+}
+.header {
+  h1 {
+    font-size: 4em !important;
+    font-weight: 300 !important;
+    span {
+      font-size: 0.85em !important;
+      color: rgb(100, 100, 100);
+    }
+  }
+  .ant-btn-circle {
+    border-radius: 3px;
+    margin-left: 1rem;
+    margin-right: 0.75rem;
+  }
+  .mdl-textfield__expandable-holder {
+    margin: 0;
+  }
+  .btn {
+    &.btn-link {
+      color: rgb(71, 71, 71);
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.mdl-button--primary {
+  background: transparent;
+  &:hover {
+    color: #0092c8;
+    background-color: transparent !important;
+  }
+}
+
+.card {
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  background: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.editable-cell {
+  position: relative;
+}
+
+.editable-cell-value-wrap {
+  padding: 5px 12px;
+  cursor: pointer;
+}
+
+.editable-row:hover .editable-cell-value-wrap {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 4px 11px;
+}
+.back-button {
+  background: transparent;
+  border: none;
+}
+
+/* Overriding styles */
+
+/* EP Logo */
+ep-sidebar .logo img {
+  padding-left: 2.5rem;
+}
+
+/* This affects at least the signature-modes page */
+.ant-collapse {
+  margin-top: 10px !important;
+}
+
+nz-table th {
+  font-weight: bold !important;
+  border-bottom: none !important; /* remove the th underline from select and edit columns for now */
+}
+
+nz-table tr:nth-child(even) {
+  background: @gray-color; /* To make the background of the even rows light gray */
+}
+
+// -------- Colors -----------
+.warning-color {
+  color: @warning-color;
+}
+
+/* STATUS COLORS  */
+
+.draft-color {
+  color: #29b6f6;
+}
+.sent-color {
+  color: #17a2b8;
+}
+.ongoing-color {
+  color: #175287;
+}
+.completed-color {
+  color: #52c41a;
+}
+.canceled-color {
+  color: #ffc107;
+}
+
+/* Forms clear button */
+
+.clear-button {
+  color: @danger-color;
+  border-color: @danger-color;
+}
+.clear-button:hover {
+  color: @white;
+  background-color: @danger-color;
+  border-color: @danger-color;
+}
+
+.floating-btns-container {
+  z-index: 1000;
+  bottom: 15px;
+  right: 15px;
+  position: fixed;
+  float: right;
+}
+
+.save-btn {
+  border-color: @white;
+}
+
+.cancel-btn {
+  color: #1d70a8 !important;
+  border-color: #1d70a8 !important;
+}
+
+.form-field-info-icon {
+  color: @info-color;
+  cursor: pointer;
+  padding-left: 5px;
+  padding-top: 5px;
+}

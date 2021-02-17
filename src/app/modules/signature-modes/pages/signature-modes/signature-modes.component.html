@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col">
+    <h2>{{ 'SIGNATURE_MODES.HEADER' | translate }}</h2>
+  </div>
+</div>
+<hr/>
+<div class="row">
+  <div class="col">
+    <ep-accordion-group>
+      <ep-accordion *ngFor="let mode of signatureModes$ | async;" [epTitle]="mode?.content?.name">
+        {{ mode.content.description | uppercase | translate }}
+      </ep-accordion>
+    </ep-accordion-group>
+  </div>
+</div>

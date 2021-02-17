@@ -1,0 +1,31 @@
+<nz-input-group [nzSuffix]="suffixIcon">
+  <input
+    attr.aria-label="{{ placeHolder | translate }}"
+    placeholder="{{ placeHolder | translate }}"
+    type="search"
+    nz-input
+    [(ngModel)]="inputValue"
+    [ngModelOptions]="{standalone: true}"
+    (input)="this.debounceSearchUpdate$.next(inputValue)"
+    [nzAutocomplete]="auto"/>
+</nz-input-group>
+
+<ng-template #suffixIcon>
+  <!-- Loading icon -->
+  <nz-spin nzSimple [nzSize]="'small'" *ngIf="isLoading" class="loading-spinner"></nz-spin>
+  <!-- Clear icon -->
+  <i nz-icon nz-icon
+     nz-tooltip
+     class="ant-input-clear-icon clear-icon"
+     nzTheme="fill"
+     nzType="close-circle" *ngIf="inputValue" (click)="clearInputValue()"></i>
+
+  <i nz-icon nzType="search" class="ml-2"></i>
+</ng-template>
+
+<nz-autocomplete #auto nzBackfill (selectionChange)="changedSelection($event.nzValue, $event.nzLabel)">
+  <nz-auto-option *ngFor="let option of options" [nzValue]="option?.content[valueField]" nzLabel="{{ option?.content | getCellData: labelField }}"
+                  nz-tooltip [nzMouseEnterDelay]="1" [nzTitle]="getOptionLabel(option?.content)">
+    {{ getOptionLabel(option?.content) }}
+  </nz-auto-option>
+</nz-autocomplete>

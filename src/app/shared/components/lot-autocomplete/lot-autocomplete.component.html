@@ -1,0 +1,12 @@
+<app-autocomplete
+  [placeHolder]="'LOT.AUTOCOMPLETE.PLACEHOLDER'"
+  [labelField]="'lotName'"
+  [valueField]="'id'"
+  [labelId]="'id'"
+  idTranslation="{{ 'LOT.AUTOCOMPLETE.ID_TRANSLATION' | translate }}"
+  [options]="options"
+  [isLoading]="isLoading"
+  (searchChange)="onSearchChange($event)"
+  (selectionChange)="onSelectionChange($event)"
+  (clear)="onClear()">
+</app-autocomplete>

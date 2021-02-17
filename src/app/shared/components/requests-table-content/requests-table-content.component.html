@@ -1,0 +1,168 @@
+<nz-table
+  class="requests-table"
+  #requestsTable
+  [nzShowPagination]="false"
+  [nzPageIndex]="pageIndex"
+  [nzPageSize]="pageSize"
+  [nzData]="records"
+  [nzLoading]="isLoading">
+
+  <thead (nzSortChange)="onSort($event)" nzSingleSort>
+  <tr>
+
+    <!-- Select Items checkbox -->
+    <th
+      *ngIf="hasRecordSelection"
+      nzShowCheckbox
+      [(nzChecked)]="hasAllRecordsChecked"
+      [nzIndeterminate]="hasSomeRecordsChecked"
+      (nzCheckedChange)="onCheckAll($event)">
+    </th>
+
+    <!-- Dynamic columns -->
+    <ng-container *ngFor="let col of columns">
+      <!-- Normal column -->
+      <th [nzShowSort]="col.type !== TableColumnType.SIGNED" nzSortKey="{{ col.field }}"
+          *ngIf="col.field !== 'status'"
+          [nzWidth]="col.width">
+        {{ col.label | translate }}</th>
+      <!-- Status column -->
+      <th *ngIf="col.field === 'status'"
+          nzShowSort
+          nzSortKey="status">
+        {{ col.label | translate }}</th>
+    </ng-container>
+
+  </tr>
+  </thead>
+  <tbody>
+
+
+  <tr *ngFor="let data of requestsTable.data">
+
+    <!-- Select checkbox -->
+    <td
+      *ngIf="hasRecordSelection"
+      nzShowCheckbox
+      [(nzChecked)]="mapOfCheckedId[data?.id]"
+      [nzDisabled]="data?.purge"
+      (nzCheckedChange)="onCheckedChange()"
+      nz-tooltip [nzMouseEnterDelay]="1"
+      nzTitle="{{ (data?.purge ? 'REQUESTS_TABLE.SELECTION.PURGED.TOOLTIP' : '') | translate }}">
+    </td>
+
+    <!-- Dynamic cells -->
+    <ng-container *ngFor="let col of columns" [ngSwitch]="col.type">
+
+      <!-- Column ID -->
+      <td *ngSwitchCase="TableColumnType.ID" attr.data-label="{{ col.label | translate }}">
+        <a [routerLink]="['/requests', data?.id]">{{ data?.id }}</a></td>
+
+      <!-- Column Boolean -->
+      <td *ngSwitchCase="TableColumnType.BOOLEAN" nzShowCheckbox [nzDisabled]="true"
+          nzChecked="{{ data | getCellData: col.field }}" attr.data-label="{{ col.label | translate }}"></td>
+
+      <!-- Column Date -->
+      <td *ngSwitchCase="TableColumnType.DATE"
+          attr.data-label="{{ col.label | translate }}">
+      <span nz-tooltip nzTitle="{{ data | getCellData: col.field }}"
+            [ngClass]="{ 'text-danger': col.field === 'deadline' && data?.expired }">
+          {{ data | getCellData: col.field | dateFromDatetime }}</span>
+        <span *ngIf="col.field === 'deadline' && data?.expired"
+              [ngClass]="{ 'text-danger': col.field === 'deadline' && data?.expired }">
+         {{ 'REQUESTS_TABLE.STATUS.EXPIRED' | translate }}</span>
+      </td>
+
+      <!-- CUSTOM COLUMNS -->
+
+      <!-- Column STATUS -->
+      <td *ngSwitchCase="TableColumnType.STATUS" attr.data-label="{{ col.label | translate }}">
+
+        {{ (('REQUESTSTATUS.' + (data | getCellData: col.field) | uppercase | translate)) | titlecase }}
+
+        <span *ngIf="data?.comments">
+          <i nz-icon nzType="exclamation-circle" nzTheme="fill" nz-tooltip
+             nzTitle="{{ data?.comments | uppercase | translate }}" class="text-danger"></i>
+        </span>
+
+        <ng-container ngSwitch="{{ data | getCellData: col.field }}">
+          <!-- DRAFT -->
+          <nz-progress [nzPercent]="25" nzSize="small" [nzShowInfo]="false" *ngSwitchCase="RequestStatuses.DRAFT"
+                       nzStrokeColor="#29b6f6">
+          </nz-progress>
+
+          <!-- SENT -->
+          <nz-progress
+            [nzPercent]="50" nzSize="small" [nzShowInfo]="false" *ngSwitchCase="RequestStatuses.SENT"
+            nzStrokeColor="#17a2b8">
+          </nz-progress>
+
+          <!-- ONGOING -->
+          <nz-progress
+            [nzPercent]="75" nzSize="small" [nzShowInfo]="false" *ngSwitchCase="RequestStatuses.ONGOING"
+            nzStrokeColor="#175287">
+          </nz-progress>
+
+          <!-- COMPLETED -->
+          <nz-progress [nzPercent]="100" nzSize="small" *ngSwitchCase="RequestStatuses.COMPLETED"
+                       nzStrokeColor="#52c41a">
+          </nz-progress>
+
+          <!-- CANCELED -->
+          <nz-progress [nzPercent]="100" nzSize="small" [nzShowInfo]="false" nzStrokeColor="#ffc107"
+                       *ngSwitchCase="RequestStatuses.CANCELED">
+          </nz-progress>
+        </ng-container>
+      </td>
+
+
+      <td *ngSwitchCase="TableColumnType.ARCHIVED_PURGED" class="archived-status-icons"
+          attr.data-label="{{ col.label | translate }}">
+        <i nz-icon nzType="file-zip" theme="outline" *ngIf="data?.archive" nz-tooltip
+           nzTitle="{{ 'REQUESTS_TABLE.HEADER.ARCHIVED' | translate }}"></i>
+        <i nz-icon nzType="file-excel" theme="outline" *ngIf="data?.purge" nz-tooltip
+           nzTitle="{{ 'REQUESTS_TABLE.HEADER.PURGED' | translate }}"></i></td>
+
+      <!-- SIGNED / SENT -->
+      <td *ngSwitchCase="TableColumnType.SIGNED" attr.data-label="{{ col.label | translate }}">
+        <i nz-icon nzType="user"
+           nzTheme="outline" class="text-left"></i> {{ getSignedAmount(data) + '/' + data?.assignments?.length }}</td>
+
+      <!-- FROM -->
+      <td *ngSwitchCase="TableColumnType.FROM" attr.data-label="{{ col.label | translate }}">
+        <!-- External Application Name -->
+        {{ externalApplication ? externalApplication : (data | getCellData: col.field) }}
+        <br *ngIf="data | getCellData: col.field">
+        <!-- Requestor Fullname -->
+        <span class="text-info">({{ data?.requestor?.fullName | titlecase }})</span></td>
+
+      <!-- ACTION Column -->
+      <td *ngSwitchCase="TableColumnType.ACTION" attr.data-label="{{ col.label | translate }}">
+        <span class="btn-group">
+         <button class="mr-2" *appRequireAdmin
+                 ep-button
+                 (click)="onDownloadOriginalDocument(data.id)"
+                 attr.aria-label="{{ 'VIEW_REQUEST.VIEW.ORIGINAL_DOCUMENT.TOOLTIP' | translate }}"
+                 nz-tooltip nzTitle="{{ 'VIEW_REQUEST.VIEW.ORIGINAL_DOCUMENT.TOOLTIP' | translate }}">
+            <i nz-icon nzType="download" nzTheme="outline"></i>
+          </button>
+         <button class="mr-2 custom-button-icon"
+                 ep-button
+                 (click)="onDownloadLastSignedDocument(data.id)"
+                 attr.aria-label="{{ 'VIEW_REQUEST.VIEW.LAST_SIGNED_DOCUMENT.TOOLTIP' | translate }}"
+                 nz-tooltip nzTitle="{{ 'VIEW_REQUEST.VIEW.LAST_SIGNED_DOCUMENT.TOOLTIP' | translate }}">
+            <i nz-icon nzType="download" nzTheme="outline" class="custom-icon"></i>
+          </button>
+        </span>
+      </td>
+
+      <!-- Normal Column -->
+      <td *ngSwitchDefault attr.data-label="{{ col.label | translate }}">
+        {{ data | getCellData: col.field }}</td>
+    </ng-container>
+
+  </tr>
+
+  </tbody>
+
+</nz-table>

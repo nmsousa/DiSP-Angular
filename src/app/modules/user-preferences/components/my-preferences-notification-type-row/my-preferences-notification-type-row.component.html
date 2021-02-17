@@ -1,0 +1,22 @@
+<hr>
+
+<div class="row">
+  <div class="col-3 mt-1">
+    <ng-content select="[notificationType]"></ng-content>
+  </div>
+  <div class="col-2">
+    <span class="d-block d-md-none">
+      <ng-content select="[priorityMobile]"></ng-content>
+    </span>
+    <span class="d-none d-md-block">
+      <ng-content select="[priority]"></ng-content>
+    </span>
+  </div>
+  <div class="col-2">
+    <ng-content select="[requestor]"></ng-content>
+  </div>
+  <div class="col-2">
+    <ng-content select="[signatory]"></ng-content>
+  </div>
+  <div class="col-3"></div>
+</div>

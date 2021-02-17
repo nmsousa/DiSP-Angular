@@ -1,0 +1,87 @@
+@import "./../../../../styles/less/variables.less";
+
+.show-persons-btn {
+  color: #fff;
+  background-color: @info-color;
+  border-color: @info-color;
+}
+
+.show-persons-btn:hover {
+  border-color: #1d70a8;
+}
+
+nz-list {
+  min-height: 100px !important;
+}
+
+nz-list nz-list-item:nth-child(even) {
+  background: @gray-color; /* To make the background of the even rows light gray */
+}
+
+nz-form-item {
+  padding-bottom: 8px;
+}
+
+.ant-list-item-action > li {
+  padding-right: 0 !important;
+}
+
+#search-requests .ant-form-item {
+  margin-bottom: 10px;
+}
+
+.remove-person-icon {
+  padding: 5px;
+  font-size: 16px;
+}
+
+
+.ant-tag-checkable {
+  border: 1px solid #d9d9d9;
+  background: #fafafa;
+}
+
+.ant-tag-checkable-checked {
+  background-color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.role-tags-container nz-tag {
+  height: 30px;
+  line-height: 30px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: .25rem;
+  user-select: none;
+  cursor: auto;
+}
+
+
+/* Drag and Drop styling */
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid #4582EC;
+  padding: 8px 16px;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+nz-list-item.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+nz-list .selected {
+  background-color: #c5d5db !important;
+}
+
+.reorder-arrow {
+  font-size: 18px;
+}

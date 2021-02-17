@@ -1,0 +1,171 @@
+<div class="row">
+  <div class="col">
+    <h2 class="d-inline-block mr-4">{{ request?.document?.title }}</h2>
+    <h4 class="d-inline-block">
+      <span class="font-weight-bold" [ngClass]="request?.status?.toLowerCase() + '-color'">{{ request?.status }}</span>
+    </h4>
+  </div>
+</div>
+
+<hr />
+
+
+<div class="row">
+  <!-- Top buttons bar -->
+  <div class="col">
+    <!-- Edit Request -->
+    <button ep-button ep-colored="primary" ep-theme="ant" class="float-left" [routerLink]="'edit'"
+      [disabled]="request?.status !== RequestStatuses.DRAFT && request?.status !== RequestStatuses.SENT">
+      {{ 'VIEW_REQUEST.BTN_EDIT' | translate | uppercase }}
+    </button>
+     <!-- Locate Signature -->
+     <button ep-button ep-colored="primary" ep-theme="ant" class="float-left ml-2" [routerLink]="'locate'">
+     {{ 'VIEW_REQUEST.BTN_LOCATE' | translate | uppercase }}
+   </button>
+  </div>
+
+  <div class="col">
+    <!-- Back -->
+    <button ep-button ep-colored="primary" ep-theme="ant" class="float-right" [routerLink]="'../'">
+      {{ 'GENERIC.BTN_BACK' | translate | uppercase }}
+    </button>
+  </div>
+</div>
+
+
+<hr />
+
+<!-- Main Informations -->
+<div class="row mb-3">
+  <div class="col">
+    <ep-accordion epTitle="{{ 'VIEW_REQUEST.MAIN_INFORMATION.HEADER' | translate }}">
+      <app-requests-table-content
+        [columns]="columns"
+        [records]="requests"
+        [isLoading]="isLoading">
+      </app-requests-table-content>
+    </ep-accordion>
+  </div>
+</div>
+
+<div class="row">
+  <!-- Signatories -->
+  <div class="col-xs-12 col-lg-6 mb-3">
+    <ep-accordion epTitle="{{ 'VIEW_REQUEST.SIGNATORIES.HEADER' | translate }}">
+
+      <nz-table
+        #signatoriesTable
+        [nzData]="assignments"
+        [nzLoading]="isLoading"
+        [nzShowPagination]="false">
+
+        <thead>
+          <tr>
+
+            <th>{{ 'VIEW_REQUEST.SIGNATORIES.TABLE.HEADER.SIGNATORY' | translate }}</th>
+            <th>{{ 'VIEW_REQUEST.SIGNATORIES.TABLE.HEADER.STATUS' | translate }}</th>
+            <th>{{ 'VIEW_REQUEST.SIGNATORIES.TABLE.HEADER.DEADLINE' | translate }}</th>
+            <th>{{ 'VIEW_REQUEST.SIGNATORIES.TABLE.HEADER.ACTIONS' | translate }}</th>
+
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let data of signatoriesTable.data">
+
+            <td attr.data-label="{{ 'VIEW_REQUEST.SIGNATORIES.TABLE.HEADER.SIGNATORY' | translate }}">{{ data?.signatory?.fullName }}</td>
+            <td attr.data-label="{{ 'VIEW_REQUEST.SIGNATORIES.TABLE.HEADER.STATUS' | translate }}">
+              <span [ngClass]="
+              {'text-danger': data?.status === AssignmentStatuses.REFUSED || data?.status === AssignmentStatuses.REJECTED || data?.status === AssignmentStatuses.REMOVED,
+              'warning-color': data?.status === AssignmentStatuses.PENDING || data?.status === AssignmentStatuses.UNDEFINED || data?.status === AssignmentStatuses.WAITING,
+              'text-success': data?.status === AssignmentStatuses.SIGNED }">{{ data?.status | titlecase }}</span></td>
+            <td attr.data-label="{{ 'VIEW_REQUEST.SIGNATORIES.TABLE.HEADER.DEADLINE' | translate }}">
+              <span nz-tooltip nzTitle="{{ data?.deadline }}">
+                {{ data?.deadline | dateFromDatetime }}
+              </span>
+            </td>
+            <td></td>
+
+          </tr>
+
+        </tbody>
+
+      </nz-table>
+
+    </ep-accordion>
+  </div>
+
+  <!-- Security and Roles -->
+  <div class="col-xs-12 col-lg-6 mb-3">
+    <ep-accordion epTitle="{{ 'VIEW_REQUEST.SECURITY_ROLES.HEADER' | translate }}">
+
+      <nz-table
+        #securityAndRolesTable
+        [nzData]="securityAndRoles"
+        [nzLoading]="isLoading"
+        [nzShowPagination]="false">
+
+        <thead>
+          <tr>
+
+            <th>{{ 'VIEW_REQUEST.SECURITY_ROLES.TABLE.HEADER.PERSON' | translate }}</th>
+            <th>{{ 'VIEW_REQUEST.SECURITY_ROLES.TABLE.HEADER.ROLES' | translate }}</th>
+
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let data of securityAndRolesTable.data">
+
+            <td attr.data-label="{{ 'VIEW_REQUEST.SECURITY_ROLES.TABLE.HEADER.PERSON' | translate }}">{{ data.label }}</td>
+            <td attr.data-label="{{ 'VIEW_REQUEST.SECURITY_ROLES.TABLE.HEADER.ROLES' | translate }}">
+              <span class="badge badge-primary security-role-badge" *ngFor="let role of data.roles">
+                <span *ngIf="role?.active" >{{ 'SECURITY_ROLES.' + role?.role | translate | uppercase }}</span>
+              </span>
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </nz-table>
+
+    </ep-accordion>
+  </div>
+</div>
+
+<!-- Metadata -->
+<div class="row">
+  <div class="col">
+    <ep-accordion epTitle="{{ 'VIEW_REQUEST.METADATA.HEADER' | translate }}">
+
+      <nz-table
+        #metadataTable
+        [nzData]="metadata"
+        [nzLoading]="isLoading"
+        [nzShowPagination]="false">
+
+        <thead>
+          <tr>
+
+            <th>{{ 'VIEW_REQUEST.METADATA.TABLE.HEADER.METATYPE' | translate }}</th>
+            <th>{{ 'VIEW_REQUEST.METADATA.TABLE.HEADER.VALUE' | translate }}</th>
+
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let data of metadataTable.data">
+
+            <td attr.data-label="{{ 'VIEW_REQUEST.METADATA.TABLE.HEADER.METATYPE' | translate }}">{{ data?.metatype?.name }}</td>
+            <td attr.data-label="{{ 'VIEW_REQUEST.METADATA.TABLE.HEADER.VALUE' | translate }}">{{ data?.value }}</td>
+
+          </tr>
+
+        </tbody>
+
+      </nz-table>
+
+    </ep-accordion>
+  </div>
+</div>

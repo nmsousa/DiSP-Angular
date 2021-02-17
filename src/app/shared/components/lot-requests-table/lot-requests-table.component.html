@@ -1,0 +1,18 @@
+<div align="right" class="requests-table-pagination mb-2">
+  <nz-pagination
+    nzShowSizeChanger
+    [nzPageSizeOptions]="[5, 10, 25]"
+    [nzTotal]="totalRecords"
+    [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize"
+    (nzPageIndexChange)="pageIndexChange($event)"
+    (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
+</div>
+
+<app-requests-table-content
+  [columns]="columns"
+  [pageIndex]="pageIndex"
+  [pageSize]="pageSize"
+  [records]="tableRequests"
+  [externalApplication]="externalApplication"
+  (sort)="sort($event)"></app-requests-table-content>

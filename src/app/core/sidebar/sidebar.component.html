@@ -1,0 +1,47 @@
+<ep-sidebar
+  [width]="300"
+  [theme]="'dark'"
+  logo="assets/ep-logo-sidebar.png"
+  [isCollapsed]="isCollapsed"
+  [breakPoint]="'lg'"
+  [collapsedWidth]="0">
+
+  <div class="disp__sidebar">
+    <div id="disp_logo" class="disp-logo">
+    	<img src="assets/disp_logo_white.png" alt="DISP Logo" />
+    </div>
+
+
+      <!-- Side menu -->
+      <ul ep-menu [epTheme]="'dark'" epMode="inline">
+
+        <!-- Everyone -->
+        <li ep-menu-item [routerLink]="'/requests'">{{ 'REQUESTS.MENU' | translate }}</li>
+        <li ep-menu-item [routerLink]="'/templates'">{{ 'TEMPLATES.MENU' | translate }}</li>
+        <li ep-menu-item [routerLink]="'/user-preferences'">{{ 'USER_PREFERENCES.MENU' | translate }}</li>
+        <li ep-menu-item (click)="navigateToTokenPage()">{{ 'TOKEN.MENU' | translate }}</li>
+        <li ep-menu-item [routerLink]="'/signature-modes'">{{ 'SIGNATURE_MODES.MENU' | translate }}</li>
+        <li ep-menu-item [routerLink]="'/certify-document'">{{ 'CERTIFY_DOCUMENT.MENU' | translate }}</li>
+
+        <!-- Admin -->
+        <li *appRequireAdmin><hr></li>
+        <li ep-menu-item [routerLink]="'/signature-types'" *appRequireAdmin>{{ 'SIGNATURE_TYPES.MENU' | translate }}</li>
+        <li ep-menu-item [routerLink]="'/latest-requests'" *appRequireAdmin>{{ 'LATEST_REQUESTS.MENU' | translate }}</li>
+        <li ep-menu-item [routerLink]="'/search-requests'" *appRequireAdmin>{{ 'SEARCH_REQUESTS.MENU' | translate }}</li>
+        <li ep-menu-item [routerLink]="'/auditing-events'" *appRequireAdmin>{{ 'AUDITING_EVENTS.MENU' | translate }}</li>
+        <li ep-menu-item [routerLink]="'/auditing-certify-documents'" *appRequireAdmin>{{ 'AUDITING_CERTIFY_DOCUMENTS.MENU' | translate }}</li>
+
+        <li><hr></li>
+
+        <li ep-menu-item (click)="openPopup('https://epintranet.in.ep.europa.eu/files/live/sites/epintranet/files/it-support/applications-software/disp/disp-user-guide.pdf')">{{ 'USER_GUIDE.MENU' | translate }}</li>
+        <li ep-menu-item (click)="openPopup('https://evol1wiki.in.ep.europa.eu/wiki/x/J9bRJQ')">FAQ</li>
+        <li ep-menu-item>
+          <span title>
+            <i nz-icon nzType="phone"></i>ITEC Service Desk: 84300
+          </span>
+        </li>
+
+      </ul>
+
+  </div>
+</ep-sidebar>
